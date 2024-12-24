@@ -1,13 +1,12 @@
-basePath: /v2
 definitions:
-  controllers.LoginDto:
+  auth.LoginDto:
     properties:
       email:
         type: string
       password:
         type: string
     type: object
-host: petstore.swagger.io
+host: localhost:1323
 info:
   contact:
     email: instashop@swagger.io
@@ -21,20 +20,110 @@ info:
   title: Instashop Swagger API
   version: "1.0"
 paths:
+  /auth/register:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Auth_Register
+  /auth/send-otp:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Auth_SendEmailOtp
+  /auth/verify-otp:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Auth_VerifyOtp
   /login:
     post:
-      description: Login route
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/controllers.LoginDto'
+              $ref: '#/definitions/auth.LoginDto'
             type: array
-      summary: Login routes
       tags:
-      - Login
+      - Auth_Login
+  /orders/{id}:
+    delete:
+      parameters:
+      - description: id of order
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Order_Delete
+    get:
+      parameters:
+      - description: id of order
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Order_GetOne
+    patch:
+      parameters:
+      - description: id of order
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Order_Update
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Order_Create
   /product/{id}:
+    delete:
+      parameters:
+      - description: id of product
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Product_Delete
     patch:
       description: Product update
       parameters:
@@ -49,16 +138,37 @@ paths:
           schema:
             type: string
       tags:
-      - ProductUpdate
-  /send-otp:
-    post:
-      description: Login routes
+      - Product_Update
+  /products:
+    get:
       responses:
         "200":
           description: OK
           schema:
             type: string
-      summary: Send otp route
       tags:
-      - SendOtp
+      - Product_GetAll
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Product_Create
+  /products/{id}:
+    get:
+      parameters:
+      - description: id of product
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - Product_GetOne
 swagger: "2.0"

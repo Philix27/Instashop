@@ -15,34 +15,179 @@
         },
         "version": "1.0"
     },
-    "host": "petstore.swagger.io",
-    "basePath": "/v2",
+    "host": "localhost:1323",
     "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth_Register"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/send-otp": {
+            "post": {
+                "tags": [
+                    "Auth_SendEmailOtp"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verify-otp": {
+            "post": {
+                "tags": [
+                    "Auth_VerifyOtp"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
-                "description": "Login route",
                 "tags": [
-                    "Login"
+                    "Auth_Login"
                 ],
-                "summary": "Login routes",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/controllers.LoginDto"
+                                "$ref": "#/definitions/auth.LoginDto"
                             }
                         }
                     }
                 }
             }
         },
+        "/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Order_GetOne"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Order_Create"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Order_Delete"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Order_Update"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/product/{id}": {
+            "delete": {
+                "tags": [
+                    "Product_Delete"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "description": "Product update",
                 "tags": [
-                    "ProductUpdate"
+                    "Product_Update"
                 ],
                 "parameters": [
                     {
@@ -63,13 +208,48 @@
                 }
             }
         },
-        "/send-otp": {
-            "post": {
-                "description": "Login routes",
+        "/products": {
+            "get": {
                 "tags": [
-                    "SendOtp"
+                    "Product_GetAll"
                 ],
-                "summary": "Send otp route",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Product_Create"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "tags": [
+                    "Product_GetOne"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -82,7 +262,7 @@
         }
     },
     "definitions": {
-        "controllers.LoginDto": {
+        "auth.LoginDto": {
             "type": "object",
             "properties": {
                 "email": {

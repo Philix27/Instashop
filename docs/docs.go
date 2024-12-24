@@ -24,31 +24,177 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth_Register"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/send-otp": {
+            "post": {
+                "tags": [
+                    "Auth_SendEmailOtp"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verify-otp": {
+            "post": {
+                "tags": [
+                    "Auth_VerifyOtp"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
-                "description": "Login route",
                 "tags": [
-                    "Login"
+                    "Auth_Login"
                 ],
-                "summary": "Login routes",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/controllers.LoginDto"
+                                "$ref": "#/definitions/auth.LoginDto"
                             }
                         }
                     }
                 }
             }
         },
+        "/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Order_GetOne"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Order_Create"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Order_Delete"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Order_Update"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/product/{id}": {
+            "delete": {
+                "tags": [
+                    "Product_Delete"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "description": "Product update",
                 "tags": [
-                    "ProductUpdate"
+                    "Product_Update"
                 ],
                 "parameters": [
                     {
@@ -69,13 +215,48 @@ const docTemplate = `{
                 }
             }
         },
-        "/send-otp": {
-            "post": {
-                "description": "Login routes",
+        "/products": {
+            "get": {
                 "tags": [
-                    "SendOtp"
+                    "Product_GetAll"
                 ],
-                "summary": "Send otp route",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Product_Create"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "tags": [
+                    "Product_GetOne"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -88,7 +269,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.LoginDto": {
+        "auth.LoginDto": {
             "type": "object",
             "properties": {
                 "email": {
@@ -105,8 +286,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "petstore.swagger.io",
-	BasePath:         "/v2",
+	Host:             "localhost:1323",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Instashop Swagger API",
 	Description:      "This is a simple e-commerce server.",

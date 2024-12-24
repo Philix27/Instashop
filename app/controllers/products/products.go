@@ -7,22 +7,21 @@ import (
 )
 
 
-// ProductUpdate  Product Update
-//	@Description	Product update
-//	@Tags			ProductUpdate
-//	@Success		200	{string} string
-//	@Router			/product/{id} [patch]
-//	@Param			id path string true "id of product"
-func ProductUpdate(c echo.Context) error {
-	product_id := c.Param("id")
-	return c.String(http.StatusOK, product_id)
-}
-func ProductDelete(c echo.Context) error {
-	product_id := c.Param("id")
-	return c.String(http.StatusOK, product_id)
-}
+// @Tags		Product_Create
+//	@Success	200	{string}	string
+//	@Router		/products [post]
 func ProductCreate(c echo.Context) error { return nil }
+
+
+// @Tags		Product_GetAll
+//	@Success	200	{string}	string
+//	@Router		/products [get]
 func ProductGetAll(c echo.Context) error { return nil }
+
+// @Tags		Product_GetOne
+//	@Success	200	{string}	string
+//	@Router		/products/{id} [get]
+//	@Param		id	path	string	true	"id of product"
 func ProductGetOne(c echo.Context) error {
 	product_id := c.Param("id")
 	return c.String(http.StatusOK, product_id)
