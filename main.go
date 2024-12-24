@@ -4,14 +4,17 @@ import (
 	_ "instashop/docs"
 	"instashop/routes"
 	"net/http"
+	"time"
 
+	echojwt "github.com/labstack/echo-jwt"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"golang.org/x/time/rate"
+
 	// "github.com/swaggo/echo-swagger"
 
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
-
-// PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 //	@title			Instashop Swagger API
 //	@version		1.0
@@ -29,6 +32,32 @@ import (
 // @BasePath	/v2
 func main() {
 	e := echo.New()
+	e.Use(middleware.Logger())
+	e.Use(middleware.CSRF())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"https://labstack.com", "https://labstack.net"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
+	e.Use(echojwt.JWT([]byte("secret")))
+
+	rateLimitConfig := middleware.RateLimiterConfig{
+		Skipper: middleware.DefaultSkipper,
+		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
+			middleware.RateLimiterMemoryStoreConfig{Rate: rate.Limit(10), Burst: 30, ExpiresIn: 3 * time.Minute},
+		),
+		IdentifierExtractor: func(ctx echo.Context) (string, error) {
+			id := ctx.RealIP()
+			return id, nil
+		},
+		ErrorHandler: func(context echo.Context, err error) error {
+			return context.JSON(http.StatusForbidden, nil)
+		},
+		DenyHandler: func(context echo.Context, identifier string, err error) error {
+			return context.JSON(http.StatusTooManyRequests, nil)
+		},
+	}
+
+	e.Use(middleware.RateLimiterWithConfig(rateLimitConfig))
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
