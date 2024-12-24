@@ -1,4 +1,4 @@
-package routes
+package users
 
 import (
 	"net/http"
@@ -6,15 +6,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// @Summary get all items in the todo list
-// @ID UpdateUser
-// @Produce json
-// @Success 200 {object} user
-// @Router /user [update]
 func UserUpdate(c echo.Context) error {
 	return c.String(http.StatusOK, "updateUser")
 }
-
 
 func UserDelete(c echo.Context) error {
 	return c.String(http.StatusOK, "deleteUser")
