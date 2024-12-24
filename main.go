@@ -78,10 +78,10 @@ func show(c echo.Context) error {
 	return c.String(http.StatusOK, "team:"+team+", member:"+member)
 }
 
-// e.POST("/save", save)
-func save(c echo.Context) error {
-	// Get name and email
-	name := c.FormValue("name")
-	email := c.FormValue("email")
-	return c.String(http.StatusOK, "name:"+name+", email:"+email)
-}
+// // e.POST("/save", save)
+// func save(c echo.Context) error {
+// 	// Get name and email
+// 	name := c.FormValue("name")
+// 	email := c.FormValue("email")
+// 	return c.String(http.StatusOK, "name:"+name+", email:"+email)
+// }
