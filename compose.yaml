@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: instashop
+    environment:
+      POSTGRES_USER: instashop_user
+      POSTGRES_PASSWORD: instashop_pass
+      POSTGRES_DB: instashop_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - instashop_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U instashop_user -d instashop_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  happy_data:
+
