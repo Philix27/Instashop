@@ -8,4 +8,3 @@ func deleteOrder(c echo.Context) error  { return nil }
 func createOrder(c echo.Context) error  { return nil }
 func getAllOrders(c echo.Context) error { return nil }
 func getOneOrder(c echo.Context) error  { return nil }
-
