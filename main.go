@@ -33,13 +33,10 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
-	e.POST("/users", show)
-	// e.GET("/users/", createUser)
-	// e.GET("/users/:id", getUser)
-	// e.PUT("/users/:id", updateUser)
-	// e.DELETE("/users/:id", deleteUser)
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
+	// e.POST("/users", show)
 
+	routes.Registry(e)
 	routes.PrintRoutes(e)
 	e.Logger.Fatal(e.Start(":1323"))
 }
