@@ -1,17 +1,14 @@
 package main
 
 import (
+	"instashop/app/controllers"
 	_ "instashop/docs"
-	"instashop/routes"
 	"net/http"
 	"time"
 
-	echojwt "github.com/labstack/echo-jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"golang.org/x/time/rate"
-
-	// "github.com/swaggo/echo-swagger"
 
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
@@ -33,12 +30,12 @@ import (
 func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
-	e.Use(middleware.CSRF())
+	// e.Use(middleware.CSRF())
+	// e.Use(echojwt.JWT([]byte("secret")))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"https://labstack.com", "https://labstack.net"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
-	e.Use(echojwt.JWT([]byte("secret")))
 
 	rateLimitConfig := middleware.RateLimiterConfig{
 		Skipper: middleware.DefaultSkipper,
@@ -65,8 +62,8 @@ func main() {
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	// e.POST("/users", show)
 
-	routes.Registry(e)
-	routes.PrintRoutes(e)
+	controllers.Registry(e)
+	controllers.PrintRoutes(e)
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
