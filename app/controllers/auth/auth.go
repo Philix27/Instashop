@@ -11,13 +11,9 @@ type LoginDto struct {
 	Password string `json:"password"`
 }
 
-// Login Auth Login
-//
-//	@Summary		Login routes
-//	@Description	Login route
-//	@Tags			Login
-//	@Success		200	{array}	LoginDto
-//	@Router			/login [POST]
+// @Tags		Auth_Login
+// @Success	200	{array}	LoginDto
+// @Router		/login [POST]
 func AuthLogin(c echo.Context) error {
 	dto := new(LoginDto)
 
@@ -32,13 +28,9 @@ type SendEmailDto struct {
 	Email string `json:"email"`
 }
 
-// AuthSendEmailOtp  AuthSendEmailOtp
-//
-//	@Summary		Send otp route
-//	@Description	Login routes
-//	@Tags			SendOtp
-//	@Success		200	{string} string
-//	@Router			/send-otp [POST]
+// @Tags		Auth_SendEmailOtp
+// @Success	200	{string}	string
+// @Router		/auth/send-otp [POST]
 func AuthSendEmailOtp(c echo.Context) error {
 	dto := new(LoginDto)
 
@@ -55,6 +47,9 @@ type VerifyOtpDtp struct {
 	Token string `json:"token"`
 }
 
+// @Tags		Auth_VerifyOtp
+// @Success	200	{string}	string
+// @Router		/auth/verify-otp [POST]
 func AuthVerifyOtp(c echo.Context) error {
 	dto := new(LoginDto)
 
@@ -71,6 +66,9 @@ type RegisterDto struct {
 	ConfirmPassword string `json:"confirmPassword"`
 }
 
+// @Tags		Auth_Register
+// @Success	200	{string}	string
+// @Router		/auth/register [POST]
 func AuthRegister(c echo.Context) error {
 	dto := new(LoginDto)
 
