@@ -9,7 +9,7 @@ import (
 )
 
 // ValidateJWTToken validates a JWT token and checks if a specific claim matches the expected value
-func GetTokenPayload(tokenString string) (error, string) {
+func ValidateAndGetTokenPayload(tokenString string) (error, string) {
 	// Parse and validate the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Ensure the signing method is what you expect (HMAC-SHA256 in this case)

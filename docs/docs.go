@@ -24,6 +24,44 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth_Login"
+                ],
+                "parameters": [
+                    {
+                        "description": "Auth_Login",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrMsg"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/register": {
             "post": {
                 "consumes": [
@@ -138,19 +176,53 @@ const docTemplate = `{
                 }
             }
         },
-        "/login": {
-            "post": {
+        "/orders/cancel/{id}": {
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
-                    "Auth_Login"
+                    "Order_cancel"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of order",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Order_cancel",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/orders.OrderCancelInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "MyHeader must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "success",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/auth.LoginDto"
-                            }
+                            "$ref": "#/definitions/orders.OrderCancelResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/types.ErrMsg"
                         }
                     }
                 }
@@ -338,10 +410,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.LoginDto": {
+        "auth.LoginInput": {
             "type": "object",
             "properties": {
                 "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "UserId": {
                     "type": "string"
                 },
                 "password": {
@@ -374,23 +457,8 @@ const docTemplate = `{
         },
         "auth.RegisterResponse": {
             "type": "object",
-            "required": [
-                "confirmPassword",
-                "email",
-                "password",
-                "token"
-            ],
             "properties": {
-                "confirmPassword": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "token": {
+                "message": {
                     "type": "string"
                 }
             }
@@ -441,6 +509,28 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "orders.OrderCancelInput": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "orders.OrderCancelResponse": {
+            "type": "object",
+            "properties": {
+                "UserId": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }

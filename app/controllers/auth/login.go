@@ -13,7 +13,7 @@ type LoginInput struct {
 	Password string `json:"password"`
 }
 type LoginResponse struct {
-	UserId    string `json:"UserId"`
+	UserId      string `json:"UserId"`
 	AccessToken string `json:"password"`
 }
 
@@ -32,6 +32,6 @@ func AuthLogin(c echo.Context) error {
 			Error: err.Error(),
 		})
 	}
-
+	// todo: check db for user email and compare passwords
 	return c.JSON(http.StatusCreated, dto)
 }
