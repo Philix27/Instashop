@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"instashop/app/models"
 	"instashop/infra/crypto"
 	"instashop/infra/types"
 	"instashop/infra/validation"
@@ -10,25 +11,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type SendEmailOtpInput struct {
-	Email string `json:"email" validate:"required"`
-}
-
-type SendEmailResponse struct {
-	Token string `json:"token"`
-	// todo: remove otp
-	Otp string `json:"otp"`
-}
-
 // @Tags		Auth_SendEmailOtp
-// @Success	200		{object}	SendEmailResponse	"success"
-// @Param		request	body		SendEmailOtpInput	true	"Auth_SendEmailOtp"
+// @Success	200		{object}	models.SendEmailResponse	"success"
+// @Param		request	body		models.SendEmailOtpInput	true	"Auth_SendEmailOtp"
 // @Router		/auth/send-otp [POST]
 // @Accept		json
 // @Produce	json
 // @Failure	400	{object}	types.ErrMsg	"error"
 func AuthSendEmailOtp(c echo.Context) error {
-	dto := new(SendEmailOtpInput)
+	dto := new(models.SendEmailOtpInput)
 
 	if err := validation.BindAndValidate(c, dto); err != nil {
 		return c.JSON(http.StatusBadRequest, types.ErrMsg{
@@ -47,8 +38,8 @@ func AuthSendEmailOtp(c echo.Context) error {
 
 	//  todo: Send otp value to user email via a desired email provider such as resend or twilo
 
-	return c.JSON(http.StatusOK, SendEmailResponse{
+	return c.JSON(http.StatusOK, models.SendEmailResponse{
 		Token: token,
-		Otp: otpValue,
+		Otp:   otpValue,
 	})
 }

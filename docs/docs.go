@@ -42,7 +42,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginInput"
+                            "$ref": "#/definitions/models.LoginInput"
                         }
                     }
                 ],
@@ -50,7 +50,7 @@ const docTemplate = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginResponse"
+                            "$ref": "#/definitions/models.LoginResponse"
                         }
                     },
                     "400": {
@@ -80,7 +80,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.RegisterInput"
+                            "$ref": "#/definitions/models.RegisterInput"
                         }
                     }
                 ],
@@ -88,7 +88,7 @@ const docTemplate = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/auth.RegisterResponse"
+                            "$ref": "#/definitions/models.RegisterResponse"
                         }
                     },
                     "400": {
@@ -118,7 +118,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.SendEmailOtpInput"
+                            "$ref": "#/definitions/models.SendEmailOtpInput"
                         }
                     }
                 ],
@@ -126,7 +126,7 @@ const docTemplate = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/auth.SendEmailResponse"
+                            "$ref": "#/definitions/models.SendEmailResponse"
                         }
                     },
                     "400": {
@@ -156,7 +156,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.VerifyOtpInput"
+                            "$ref": "#/definitions/models.VerifyOtpInput"
                         }
                     }
                 ],
@@ -164,7 +164,7 @@ const docTemplate = `{
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/auth.VerifyOtpResponse"
+                            "$ref": "#/definitions/models.VerifyOtpResponse"
                         }
                     },
                     "400": {
@@ -570,7 +570,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.LoginInput": {
+        "models.LoginInput": {
             "type": "object",
             "required": [
                 "email",
@@ -585,7 +585,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.LoginResponse": {
+        "models.LoginResponse": {
             "type": "object",
             "properties": {
                 "UserId": {
@@ -596,7 +596,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.RegisterInput": {
+        "models.RegisterInput": {
             "type": "object",
             "required": [
                 "confirmPassword",
@@ -619,7 +619,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.RegisterResponse": {
+        "models.RegisterResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -627,7 +627,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.SendEmailOtpInput": {
+        "models.SendEmailOtpInput": {
             "type": "object",
             "required": [
                 "email"
@@ -638,7 +638,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.SendEmailResponse": {
+        "models.SendEmailResponse": {
             "type": "object",
             "properties": {
                 "otp": {
@@ -650,7 +650,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.VerifyOtpInput": {
+        "models.VerifyOtpInput": {
             "type": "object",
             "required": [
                 "email",
@@ -669,7 +669,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.VerifyOtpResponse": {
+        "models.VerifyOtpResponse": {
             "type": "object",
             "properties": {
                 "token": {

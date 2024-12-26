@@ -3,6 +3,8 @@ CREATE TABLE products (
   title TEXT   UNIQUE     NOT NULL,
   description TEXT   UNIQUE     NOT NULL,
   image_url TEXT   UNIQUE     NOT NULL,
+  price FLOAT NOT NULL,
+  stock INT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

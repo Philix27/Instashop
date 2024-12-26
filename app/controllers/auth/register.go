@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"instashop/app/models"
 	"instashop/infra/crypto"
 	"instashop/infra/types"
 	"instashop/infra/validation"
@@ -9,25 +10,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type RegisterInput struct {
-	Email           string `json:"email" validate:"required"`
-	Password        string `json:"password" validate:"required"`
-	ConfirmPassword string `json:"confirmPassword" validate:"required"`
-	Token           string `json:"token" validate:"required"`
-}
-type RegisterResponse struct {
-	Message string `json:"message"`
-}
-
-// @Tags		Auth_Register
-// @Success	200		{object}	RegisterResponse	"success"
-// @Param		request	body		RegisterInput		true	"Auth_Register"
-// @Router		/auth/register [POST]
-// @Accept		json
-// @Produce	json
-// @Failure	400	{object}	types.ErrMsg	"error"
+//	@Tags		Auth_Register
+//	@Success	200		{object}	models.RegisterResponse	"success"
+//	@Param		request	body		models.RegisterInput	true	"Auth_Register"
+//	@Router		/auth/register [POST]
+//	@Accept		json
+//	@Produce	json
+//	@Failure	400	{object}	types.ErrMsg	"error"
 func AuthRegister(c echo.Context) error {
-	dto := new(RegisterInput)
+	dto := new(models.RegisterInput)
 
 	if err := validation.BindAndValidate(c, dto); err != nil {
 		return c.JSON(http.StatusBadRequest, types.ErrMsg{
@@ -57,7 +48,7 @@ func AuthRegister(c echo.Context) error {
 
 	// todo: create user on db
 	println("hashedPassword", hashedPassword)
-	return c.JSON(http.StatusCreated, RegisterResponse{
+	return c.JSON(http.StatusCreated, models.RegisterResponse{
 		Message: "Account for " + dto.Email + "created successfully",
 	})
 }

@@ -35,7 +35,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginInput"
+                            "$ref": "#/definitions/models.LoginInput"
                         }
                     }
                 ],
@@ -43,7 +43,7 @@
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginResponse"
+                            "$ref": "#/definitions/models.LoginResponse"
                         }
                     },
                     "400": {
@@ -73,7 +73,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.RegisterInput"
+                            "$ref": "#/definitions/models.RegisterInput"
                         }
                     }
                 ],
@@ -81,7 +81,7 @@
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/auth.RegisterResponse"
+                            "$ref": "#/definitions/models.RegisterResponse"
                         }
                     },
                     "400": {
@@ -111,7 +111,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.SendEmailOtpInput"
+                            "$ref": "#/definitions/models.SendEmailOtpInput"
                         }
                     }
                 ],
@@ -119,7 +119,7 @@
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/auth.SendEmailResponse"
+                            "$ref": "#/definitions/models.SendEmailResponse"
                         }
                     },
                     "400": {
@@ -149,7 +149,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.VerifyOtpInput"
+                            "$ref": "#/definitions/models.VerifyOtpInput"
                         }
                     }
                 ],
@@ -157,7 +157,7 @@
                     "200": {
                         "description": "success",
                         "schema": {
-                            "$ref": "#/definitions/auth.VerifyOtpResponse"
+                            "$ref": "#/definitions/models.VerifyOtpResponse"
                         }
                     },
                     "400": {
@@ -563,7 +563,7 @@
         }
     },
     "definitions": {
-        "auth.LoginInput": {
+        "models.LoginInput": {
             "type": "object",
             "required": [
                 "email",
@@ -578,7 +578,7 @@
                 }
             }
         },
-        "auth.LoginResponse": {
+        "models.LoginResponse": {
             "type": "object",
             "properties": {
                 "UserId": {
@@ -589,7 +589,7 @@
                 }
             }
         },
-        "auth.RegisterInput": {
+        "models.RegisterInput": {
             "type": "object",
             "required": [
                 "confirmPassword",
@@ -612,7 +612,7 @@
                 }
             }
         },
-        "auth.RegisterResponse": {
+        "models.RegisterResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -620,7 +620,7 @@
                 }
             }
         },
-        "auth.SendEmailOtpInput": {
+        "models.SendEmailOtpInput": {
             "type": "object",
             "required": [
                 "email"
@@ -631,7 +631,7 @@
                 }
             }
         },
-        "auth.SendEmailResponse": {
+        "models.SendEmailResponse": {
             "type": "object",
             "properties": {
                 "otp": {
@@ -643,7 +643,7 @@
                 }
             }
         },
-        "auth.VerifyOtpInput": {
+        "models.VerifyOtpInput": {
             "type": "object",
             "required": [
                 "email",
@@ -662,7 +662,7 @@
                 }
             }
         },
-        "auth.VerifyOtpResponse": {
+        "models.VerifyOtpResponse": {
             "type": "object",
             "properties": {
                 "token": {
