@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"golang.org/x/time/rate"
@@ -25,17 +26,18 @@ import (
 //	@license.name	Apache 2.0
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
-//	@host	localhost:1323
+// @host	localhost:1323
 func main() {
 	////! @BasePath	/v2
 	e := echo.New()
 	e.Use(middleware.Logger())
 	// e.Use(middleware.CSRF())
 	// e.Use(echojwt.JWT([]byte("secret")))
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"https://labstack.com", "https://labstack.net"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
-	}))
+	e.Use(middleware.CORS())
+	// e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	// 	AllowOrigins: []string{"https://labstack.com", "https://labstack.net", "*"},
+	// 	AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	// }))
 
 	rateLimitConfig := middleware.RateLimiterConfig{
 		Skipper: middleware.DefaultSkipper,
@@ -60,8 +62,18 @@ func main() {
 	})
 
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
-
+	e.Validator = &BodyValidator{validator: validator.New()}
 	controllers.Registry(e)
 	controllers.PrintRoutes(e)
 	e.Logger.Fatal(e.Start(":1323"))
+}
+
+// CustomValidator struct
+type BodyValidator struct {
+	validator *validator.Validate
+}
+
+// Validate method
+func (cv *BodyValidator) Validate(i interface{}) error {
+	return cv.validator.Struct(i)
 }
