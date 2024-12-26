@@ -11,7 +11,6 @@ import (
 )
 
 func Registry(e *echo.Echo) {
-
 	e.POST("/users/", users.UserCreate)
 	e.GET("/users/", users.UserGetAll, middleware.IsAdmin)
 	e.GET("/users/:id", users.UserGet, middleware.IsUser)

@@ -6,6 +6,76 @@ definitions:
       password:
         type: string
     type: object
+  auth.RegisterInput:
+    properties:
+      confirmPassword:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      token:
+        type: string
+    required:
+    - confirmPassword
+    - email
+    - password
+    - token
+    type: object
+  auth.RegisterResponse:
+    properties:
+      confirmPassword:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      token:
+        type: string
+    required:
+    - confirmPassword
+    - email
+    - password
+    - token
+    type: object
+  auth.SendEmailOtpInput:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  auth.SendEmailResponse:
+    properties:
+      otp:
+        description: 'todo: remove otp'
+        type: string
+      token:
+        type: string
+    type: object
+  auth.VerifyOtpInput:
+    properties:
+      email:
+        type: string
+      otp:
+        type: string
+      token:
+        type: string
+    required:
+    - email
+    - otp
+    - token
+    type: object
+  auth.VerifyOtpResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  types.ErrMsg:
+    properties:
+      error:
+        type: string
+    type: object
 host: localhost:1323
 info:
   contact:
@@ -22,29 +92,74 @@ info:
 paths:
   /auth/register:
     post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Auth_Register
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterInput'
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            $ref: '#/definitions/auth.RegisterResponse'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/types.ErrMsg'
       tags:
       - Auth_Register
   /auth/send-otp:
     post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Auth_SendEmailOtp
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.SendEmailOtpInput'
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            $ref: '#/definitions/auth.SendEmailResponse'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/types.ErrMsg'
       tags:
       - Auth_SendEmailOtp
   /auth/verify-otp:
     post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Auth_VerifyOtp
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.VerifyOtpInput'
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            $ref: '#/definitions/auth.VerifyOtpResponse'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/types.ErrMsg'
       tags:
       - Auth_VerifyOtp
   /login:
