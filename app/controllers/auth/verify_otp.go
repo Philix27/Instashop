@@ -2,6 +2,7 @@ package auth
 
 import (
 	"instashop/app/models"
+	"instashop/infra/config"
 	"instashop/infra/crypto"
 	"instashop/infra/types"
 	"instashop/infra/validation"
@@ -18,30 +19,32 @@ import (
 // @Accept		json
 // @Produce	json
 // @Failure	400	{object}	types.ErrMsg	"error"
-func AuthVerifyOtp(c echo.Context) error {
+func AuthVerifyOtp(appState config.AppState) echo.HandlerFunc {
+	return func(c echo.Context) error {
 
-	dto := new(models.VerifyOtpInput)
+		dto := new(models.VerifyOtpInput)
 
-	if err := validation.BindAndValidate(c, dto); err != nil {
-		return c.JSON(http.StatusBadRequest, types.ErrMsg{
-			Error: err.Error(),
+		if err := validation.BindAndValidate(c, dto); err != nil {
+			return c.JSON(http.StatusBadRequest, types.ErrMsg{
+				Error: err.Error(),
+			})
+		}
+
+		if !crypto.ValidateAndCompareClaimToken(dto.Token, dto.Otp) {
+			return c.JSON(http.StatusBadRequest, types.ErrMsg{
+				Error: "Invalid Otp",
+			})
+		}
+
+		aToken, err := crypto.CreateJWTToken(dto.Email, time.Minute*30)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, types.ErrMsg{
+				Error: "Error in generating token",
+			})
+		}
+
+		return c.JSON(http.StatusOK, models.VerifyOtpResponse{
+			Token: aToken,
 		})
 	}
-
-	if !crypto.ValidateAndCompareClaimToken(dto.Token, dto.Otp) {
-		return c.JSON(http.StatusBadRequest, types.ErrMsg{
-			Error: "Invalid Otp",
-		})
-	}
-
-	aToken, err := crypto.CreateJWTToken(dto.Email, time.Minute*30)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, types.ErrMsg{
-			Error: "Error in generating token",
-		})
-	}
-
-	return c.JSON(http.StatusOK, models.VerifyOtpResponse{
-		Token: aToken,
-	})
 }

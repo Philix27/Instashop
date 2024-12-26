@@ -1,6 +1,7 @@
 package orders
 
 import (
+	"instashop/infra/config"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -13,7 +14,9 @@ import (
 // @Param		Authorization	header		string			true	"Header must be set for valid response"
 // @Accept		json
 // @Produce	json
-func OrderUpdate(c echo.Context) error {
-	order_id := c.Param("id")
-	return c.String(http.StatusOK, order_id)
+func OrderUpdate(appState config.AppState) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		order_id := c.Param("id")
+		return c.String(http.StatusOK, order_id)
+	}
 }
