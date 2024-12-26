@@ -63,9 +63,12 @@ type Order struct {
 	UpdatedAt   pgtype.Timestamp
 }
 
-type Orderitem struct {
+type OrderItem struct {
 	ID        int64
-	ProductID pgtype.Int4
+	OrderID   int32
+	ProductID int32
+	Quantity  int32
+	AddedAt   pgtype.Timestamptz
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
 }
@@ -75,6 +78,8 @@ type Product struct {
 	Title       string
 	Description string
 	ImageUrl    string
+	Price       float64
+	Stock       int32
 	CreatedAt   pgtype.Timestamp
 	UpdatedAt   pgtype.Timestamp
 }

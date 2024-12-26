@@ -8,9 +8,3 @@ CREATE TABLE orders (
 );
 
 
-CREATE TABLE orderItems (
-  id   BIGSERIAL PRIMARY KEY,
-  product_id  INT REFERENCES products (id),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);

@@ -44,7 +44,7 @@ INSERT INTO products (
   $2,
   $3
 )
-RETURNING id, title, description, image_url, created_at, updated_at
+RETURNING id, title, description, image_url, price, stock, created_at, updated_at
 `
 
 type Products_CreateParams struct {
@@ -61,6 +61,8 @@ func (q *Queries) Products_Create(ctx context.Context, arg Products_CreateParams
 		&i.Title,
 		&i.Description,
 		&i.ImageUrl,
+		&i.Price,
+		&i.Stock,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -68,7 +70,7 @@ func (q *Queries) Products_Create(ctx context.Context, arg Products_CreateParams
 }
 
 const products_GetAll = `-- name: Products_GetAll :many
-SELECT id, title, description, image_url, created_at, updated_at FROM products
+SELECT id, title, description, image_url, price, stock, created_at, updated_at FROM products
 ORDER BY created_at DESC
 `
 
@@ -86,6 +88,8 @@ func (q *Queries) Products_GetAll(ctx context.Context) ([]Product, error) {
 			&i.Title,
 			&i.Description,
 			&i.ImageUrl,
+			&i.Price,
+			&i.Stock,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {

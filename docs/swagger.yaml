@@ -1,5 +1,5 @@
 definitions:
-  auth.LoginInput:
+  models.LoginInput:
     properties:
       email:
         type: string
@@ -9,14 +9,14 @@ definitions:
     - email
     - password
     type: object
-  auth.LoginResponse:
+  models.LoginResponse:
     properties:
       UserId:
         type: string
       password:
         type: string
     type: object
-  auth.RegisterInput:
+  models.RegisterInput:
     properties:
       confirmPassword:
         type: string
@@ -32,19 +32,19 @@ definitions:
     - password
     - token
     type: object
-  auth.RegisterResponse:
+  models.RegisterResponse:
     properties:
       message:
         type: string
     type: object
-  auth.SendEmailOtpInput:
+  models.SendEmailOtpInput:
     properties:
       email:
         type: string
     required:
     - email
     type: object
-  auth.SendEmailResponse:
+  models.SendEmailResponse:
     properties:
       otp:
         description: 'todo: remove otp'
@@ -52,7 +52,7 @@ definitions:
       token:
         type: string
     type: object
-  auth.VerifyOtpInput:
+  models.VerifyOtpInput:
     properties:
       email:
         type: string
@@ -65,7 +65,7 @@ definitions:
     - otp
     - token
     type: object
-  auth.VerifyOtpResponse:
+  models.VerifyOtpResponse:
     properties:
       token:
         type: string
@@ -185,14 +185,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/auth.LoginInput'
+          $ref: '#/definitions/models.LoginInput'
       produces:
       - application/json
       responses:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/auth.LoginResponse'
+            $ref: '#/definitions/models.LoginResponse'
         "400":
           description: error
           schema:
@@ -209,14 +209,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/auth.RegisterInput'
+          $ref: '#/definitions/models.RegisterInput'
       produces:
       - application/json
       responses:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/auth.RegisterResponse'
+            $ref: '#/definitions/models.RegisterResponse'
         "400":
           description: error
           schema:
@@ -233,14 +233,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/auth.SendEmailOtpInput'
+          $ref: '#/definitions/models.SendEmailOtpInput'
       produces:
       - application/json
       responses:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/auth.SendEmailResponse'
+            $ref: '#/definitions/models.SendEmailResponse'
         "400":
           description: error
           schema:
@@ -257,14 +257,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/auth.VerifyOtpInput'
+          $ref: '#/definitions/models.VerifyOtpInput'
       produces:
       - application/json
       responses:
         "200":
           description: success
           schema:
-            $ref: '#/definitions/auth.VerifyOtpResponse'
+            $ref: '#/definitions/models.VerifyOtpResponse'
         "400":
           description: error
           schema:

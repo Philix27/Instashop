@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"instashop/app/models"
 	"instashop/infra/crypto"
 	"instashop/infra/types"
 	"instashop/infra/validation"
@@ -10,25 +11,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type VerifyOtpInput struct {
-	Token string `json:"token" validate:"required"`
-	Otp   string `json:"otp" validate:"required"`
-	Email string `json:"email" validate:"required"`
-}
-type VerifyOtpResponse struct {
-	Token string `json:"token"`
-}
-
 // @Tags		Auth_VerifyOtp
-// @Success	200		{object}	VerifyOtpResponse	"success"
-// @Param		request	body		VerifyOtpInput		true	"Auth_VerifyOtp"
+// @Success	200		{object}	models.VerifyOtpResponse	"success"
+// @Param		request	body		models.VerifyOtpInput		true	"Auth_VerifyOtp"
 // @Router		/auth/verify-otp [POST]
 // @Accept		json
 // @Produce	json
 // @Failure	400	{object}	types.ErrMsg	"error"
 func AuthVerifyOtp(c echo.Context) error {
 
-	dto := new(VerifyOtpInput)
+	dto := new(models.VerifyOtpInput)
 
 	if err := validation.BindAndValidate(c, dto); err != nil {
 		return c.JSON(http.StatusBadRequest, types.ErrMsg{
@@ -49,7 +41,7 @@ func AuthVerifyOtp(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, VerifyOtpResponse{
+	return c.JSON(http.StatusOK, models.VerifyOtpResponse{
 		Token: aToken,
 	})
 }
