@@ -29,7 +29,7 @@ run:
 
 # Run development
 rd:
-	swag fmt && swag init && $(GO_RUN_DEV) ./main.go
+	swag fmt && swag init && $(GO_CMD) fmt && $(GO_RUN_DEV) ./main.go
 
 # Install dependencies
 deps:
