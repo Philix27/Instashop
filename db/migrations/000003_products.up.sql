@@ -1,9 +1,9 @@
 CREATE TABLE products (
   id   BIGSERIAL PRIMARY KEY,
-  title TEXT   UNIQUE     NOT NULL,
-  description TEXT   UNIQUE     NOT NULL,
-  image_url TEXT   UNIQUE     NOT NULL,
-  price FLOAT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  image_url TEXT,
+  price INT NOT NULL,
   stock INT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
