@@ -1,11 +1,11 @@
 package crypto
 
 // ValidateJWTToken validates a JWT token and checks if a specific claim matches the expected value
-func ValidateToken(tokenString string, expectedValue string) bool {
+func ValidateAndCompareClaimToken(tokenString string, expectedValue string) bool {
 
-	err, claimValue := GetTokenPayload(tokenString)
+	err, claimValue := ValidateAndGetTokenPayload(tokenString)
 	println("Claim value:", claimValue)
-	
+
 	if err != nil {
 		return false
 	}

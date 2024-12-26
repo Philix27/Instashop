@@ -36,7 +36,7 @@ func AuthVerifyOtp(c echo.Context) error {
 		})
 	}
 
-	if !crypto.ValidateToken(dto.Token, dto.Otp) {
+	if !crypto.ValidateAndCompareClaimToken(dto.Token, dto.Otp) {
 		return c.JSON(http.StatusBadRequest, types.ErrMsg{
 			Error: "Invalid Otp",
 		})

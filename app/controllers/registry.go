@@ -22,15 +22,16 @@ func Registry(e *echo.Echo) {
 	e.POST("/auth/verify-otp", auth.AuthVerifyOtp)
 	e.POST("/auth/register", auth.AuthRegister)
 
-	e.POST("/products/", products.ProductCreate, middleware.IsAdmin)
-	e.GET("/products/", products.ProductGetAll, middleware.IsUser)
+	e.POST("/products", products.ProductCreate, middleware.IsAdmin)
+	e.GET("/products", products.ProductGetAll, middleware.IsUser)
 	e.GET("/products/:id", products.ProductGetOne, middleware.IsUser)
 	e.PUT("/products/:id", products.ProductUpdate, middleware.IsAdmin)
 	e.DELETE("/products/:id", products.ProductDelete, middleware.IsAdmin)
 
-	e.POST("/orders/", orders.OrderCreate, middleware.IsUser)
-	e.GET("/orders/", orders.OrderGetAll, middleware.IsUser)
+	e.POST("/orders", orders.OrderCreate, middleware.IsUser)
+	e.GET("/orders", orders.OrderGetAll, middleware.IsUser)
 	e.GET("/orders/:id", orders.OrderGetOne, middleware.IsUser)
 	e.PUT("/orders/:id", orders.OrderUpdate, middleware.IsUser)
+	e.PATCH("/orders/cancel/:id", orders.OrderCancel, middleware.IsUser)
 	e.DELETE("/orders/:id", orders.OrderDelete, middleware.IsAdmin)
 }

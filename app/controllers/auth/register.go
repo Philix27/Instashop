@@ -35,13 +35,28 @@ func AuthRegister(c echo.Context) error {
 		})
 	}
 
-	if !crypto.ValidateToken(dto.Token, dto.Email) {
+	if dto.Password != dto.ConfirmPassword {
+		return c.JSON(http.StatusBadRequest, types.ErrMsg{
+			Error: "Please confirm password",
+		})
+	}
+
+	if !crypto.ValidateAndCompareClaimToken(dto.Token, dto.Email) {
 		return c.JSON(http.StatusBadRequest, types.ErrMsg{
 			Error: "Invalid token",
 		})
 	}
 
+	hashedPassword, err := crypto.HashPassword(dto.Password)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, types.ErrMsg{
+			Error: "Invalid token",
+		})
+	}
+
 	// todo: create user on db
+	println("hashedPassword", hashedPassword)
 	return c.JSON(http.StatusCreated, RegisterResponse{
 		Message: "Account for " + dto.Email + "created successfully",
 	})
