@@ -2,6 +2,7 @@ package auth
 
 import (
 	"instashop/app/models"
+	"instashop/infra/config"
 	"instashop/infra/crypto"
 	"instashop/infra/types"
 	"instashop/infra/validation"
@@ -18,28 +19,30 @@ import (
 // @Accept		json
 // @Produce	json
 // @Failure	400	{object}	types.ErrMsg	"error"
-func AuthSendEmailOtp(c echo.Context) error {
-	dto := new(models.SendEmailOtpInput)
+func AuthSendEmailOtp(appState config.AppState) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		dto := new(models.SendEmailOtpInput)
 
-	if err := validation.BindAndValidate(c, dto); err != nil {
-		return c.JSON(http.StatusBadRequest, types.ErrMsg{
-			Error: err.Error(),
+		if err := validation.BindAndValidate(c, dto); err != nil {
+			return c.JSON(http.StatusBadRequest, types.ErrMsg{
+				Error: err.Error(),
+			})
+		}
+
+		otpValue := crypto.GenerateOTP()
+		token, err := crypto.CreateJWTToken(otpValue, time.Minute*10)
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, types.ErrMsg{Error: "Something went wrong"})
+		}
+
+		println("Otp value", otpValue)
+
+		//  todo: Send otp value to user email via a desired email provider such as resend or twilo
+
+		return c.JSON(http.StatusOK, models.SendEmailResponse{
+			Token: token,
+			Otp:   otpValue,
 		})
 	}
-
-	otpValue := crypto.GenerateOTP()
-	token, err := crypto.CreateJWTToken(otpValue, time.Minute*10)
-
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, types.ErrMsg{Error: "Something went wrong"})
-	}
-
-	println("Otp value", otpValue)
-
-	//  todo: Send otp value to user email via a desired email provider such as resend or twilo
-
-	return c.JSON(http.StatusOK, models.SendEmailResponse{
-		Token: token,
-		Otp:   otpValue,
-	})
 }

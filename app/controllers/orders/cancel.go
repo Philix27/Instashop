@@ -1,6 +1,7 @@
 package orders
 
 import (
+	"instashop/infra/config"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -18,7 +19,9 @@ type OrderCancelResponse struct {
 // @Produce	json
 // @Failure	400				{object}	types.ErrMsg	"error"
 // @Param		Authorization	header		string			true	"Header must be set for valid response"
-func OrderCancel(c echo.Context) error {
-	order_id := c.Param("id")
-	return c.String(http.StatusOK, order_id)
+func OrderCancel(appState config.AppState) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		order_id := c.Param("id")
+		return c.String(http.StatusOK, order_id)
+	}
 }

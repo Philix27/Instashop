@@ -1,6 +1,7 @@
 package products
 
 import (
+	"instashop/infra/config"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -17,7 +18,9 @@ type ProductDeleteResponse struct {
 // @Success	200				{object}	ProductDeleteResponse	"success"
 // @Accept		json
 // @Produce	json
-func ProductDelete(c echo.Context) error {
-	product_id := c.Param("id")
-	return c.String(http.StatusOK, product_id)
+func ProductDelete(appState config.AppState) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		product_id := c.Param("id")
+		return c.String(http.StatusOK, product_id)
+	}
 }

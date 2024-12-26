@@ -2,7 +2,9 @@ package main
 
 import (
 	"instashop/app/controllers"
+	"instashop/db"
 	_ "instashop/docs"
+	appConfig "instashop/infra/config"
 	"net/http"
 	"time"
 
@@ -28,16 +30,24 @@ import (
 
 // @host	localhost:1323
 func main() {
-	////! @BasePath	/v2
+	config := appConfig.SetupEnv()
+	queries, ctx, conn := db.Connect(config.DbUrl)
+
+	defer conn.Close(ctx)
+
+	appState := appConfig.AppState{
+		DbQueries: queries,
+		Ctx:       ctx,
+	}
+
 	e := echo.New()
 	e.Use(middleware.Logger())
 	// e.Use(middleware.CSRF())
 	// e.Use(echojwt.JWT([]byte("secret")))
-	e.Use(middleware.CORS())
-	// e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-	// 	AllowOrigins: []string{"https://labstack.com", "https://labstack.net", "*"},
-	// 	AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
-	// }))
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"https://labstack.com", "https://labstack.net", "*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	rateLimitConfig := middleware.RateLimiterConfig{
 		Skipper: middleware.DefaultSkipper,
@@ -63,7 +73,7 @@ func main() {
 
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.Validator = &BodyValidator{validator: validator.New()}
-	controllers.Registry(e)
+	controllers.Registry(e, appState)
 	controllers.PrintRoutes(e)
 	e.Logger.Fatal(e.Start(":1323"))
 }

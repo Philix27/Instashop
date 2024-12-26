@@ -1,6 +1,7 @@
 package products
 
 import (
+	"instashop/infra/config"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -20,7 +21,9 @@ type ProductGetOneResponse struct {
 // @Accept		json
 // @Produce	json
 // @Success	200	{object}	ProductGetOneResponse	"success"
-func ProductGetOne(c echo.Context) error {
-	product_id := c.Param("id")
-	return c.String(http.StatusOK, product_id)
+func ProductGetOne(appState config.AppState) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		product_id := c.Param("id")
+		return c.String(http.StatusOK, product_id)
+	}
 }

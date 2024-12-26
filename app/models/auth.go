@@ -15,6 +15,7 @@ type RegisterInput struct {
 	ConfirmPassword string `json:"confirmPassword" validate:"required"`
 	Token           string `json:"token" validate:"required"`
 }
+
 type RegisterResponse struct {
 	Message string `json:"message"`
 }
