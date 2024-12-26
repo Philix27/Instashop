@@ -176,6 +176,76 @@ const docTemplate = `{
                 }
             }
         },
+        "/orders": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order_GetAll"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/orders.OrderGetAllResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order_Create"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Order_Create",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/orders.OrderCreateInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/orders.OrderCreateResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/orders/cancel/{id}": {
             "patch": {
                 "consumes": [
@@ -185,7 +255,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Order_cancel"
+                    "Order_Cancel"
                 ],
                 "parameters": [
                     {
@@ -196,17 +266,8 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Order_cancel",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/orders.OrderCancelInput"
-                        }
-                    },
-                    {
                         "type": "string",
-                        "description": "MyHeader must be set for valid response",
+                        "description": "Header must be set for valid response",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -230,6 +291,12 @@ const docTemplate = `{
         },
         "/orders/{id}": {
             "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Order_GetOne"
                 ],
@@ -239,6 +306,13 @@ const docTemplate = `{
                         "description": "id of order",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -251,20 +325,13 @@ const docTemplate = `{
                     }
                 }
             },
-            "post": {
-                "tags": [
-                    "Order_Create"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Order_Delete"
                 ],
@@ -274,6 +341,13 @@ const docTemplate = `{
                         "description": "id of order",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -287,6 +361,12 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Order_Update"
                 ],
@@ -296,6 +376,13 @@ const docTemplate = `{
                         "description": "id of order",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -311,6 +398,12 @@ const docTemplate = `{
         },
         "/product/{id}": {
             "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Product_Delete"
                 ],
@@ -321,19 +414,31 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "success",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/products.ProductDeleteResponse"
                         }
                     }
                 }
             },
             "patch": {
-                "description": "Product update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Product_Update"
                 ],
@@ -344,13 +449,20 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "success",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/products.ProductUpdateResponse"
                         }
                     }
                 }
@@ -358,27 +470,69 @@ const docTemplate = `{
         },
         "/products": {
             "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Product_GetAll"
                 ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "success",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/products.ProductGetAllResponse"
+                            }
                         }
                     }
                 }
             },
             "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Product_Create"
                 ],
+                "parameters": [
+                    {
+                        "description": "Product_Create",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/products.ProductCreateInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "success",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/products.ProductCreateResponse"
                         }
                     }
                 }
@@ -386,6 +540,12 @@ const docTemplate = `{
         },
         "/products/{id}": {
             "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Product_GetOne"
                 ],
@@ -400,9 +560,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "success",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/products.ProductGetOneResponse"
                         }
                     }
                 }
@@ -412,6 +572,10 @@ const docTemplate = `{
     "definitions": {
         "auth.LoginInput": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -513,7 +677,15 @@ const docTemplate = `{
                 }
             }
         },
-        "orders.OrderCancelInput": {
+        "orders.OrderCancelResponse": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "string"
+                }
+            }
+        },
+        "orders.OrderCreateInput": {
             "type": "object",
             "properties": {
                 "email": {
@@ -524,13 +696,116 @@ const docTemplate = `{
                 }
             }
         },
-        "orders.OrderCancelResponse": {
+        "orders.OrderCreateResponse": {
             "type": "object",
             "properties": {
                 "UserId": {
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "orders.OrderGetAllResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "product1": {
+                    "type": "string"
+                },
+                "product2": {
+                    "type": "string"
+                },
+                "product3": {
+                    "type": "string"
+                }
+            }
+        },
+        "products.ProductCreateInput": {
+            "type": "object",
+            "required": [
+                "description",
+                "price",
+                "title"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "products.ProductCreateResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "products.ProductDeleteResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "products.ProductGetAllResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "products.ProductGetOneResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "products.ProductUpdateResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
                     "type": "string"
                 }
             }

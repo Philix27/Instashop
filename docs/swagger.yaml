@@ -5,6 +5,9 @@ definitions:
         type: string
       password:
         type: string
+    required:
+    - email
+    - password
     type: object
   auth.LoginResponse:
     properties:
@@ -67,18 +70,90 @@ definitions:
       token:
         type: string
     type: object
-  orders.OrderCancelInput:
+  orders.OrderCancelResponse:
+    properties:
+      orderId:
+        type: string
+    type: object
+  orders.OrderCreateInput:
     properties:
       email:
         type: string
       password:
         type: string
     type: object
-  orders.OrderCancelResponse:
+  orders.OrderCreateResponse:
     properties:
       UserId:
         type: string
       password:
+        type: string
+    type: object
+  orders.OrderGetAllResponse:
+    properties:
+      id:
+        type: string
+      product1:
+        type: string
+      product2:
+        type: string
+      product3:
+        type: string
+    type: object
+  products.ProductCreateInput:
+    properties:
+      description:
+        type: string
+      price:
+        type: integer
+      title:
+        type: string
+    required:
+    - description
+    - price
+    - title
+    type: object
+  products.ProductCreateResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      price:
+        type: string
+      title:
+        type: string
+    type: object
+  products.ProductDeleteResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  products.ProductGetAllResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      price:
+        type: string
+      title:
+        type: string
+    type: object
+  products.ProductGetOneResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      price:
+        type: string
+      title:
+        type: string
+    type: object
+  products.ProductUpdateResponse:
+    properties:
+      message:
         type: string
     type: object
   types.ErrMsg:
@@ -196,14 +271,68 @@ paths:
             $ref: '#/definitions/types.ErrMsg'
       tags:
       - Auth_VerifyOtp
+  /orders:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/orders.OrderGetAllResponse'
+            type: array
+      tags:
+      - Order_GetAll
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Order_Create
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/orders.OrderCreateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/orders.OrderCreateResponse'
+      tags:
+      - Order_Create
   /orders/{id}:
     delete:
+      consumes:
+      - application/json
       parameters:
       - description: id of order
         in: path
         name: id
         required: true
         type: string
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
@@ -212,12 +341,21 @@ paths:
       tags:
       - Order_Delete
     get:
+      consumes:
+      - application/json
       parameters:
       - description: id of order
         in: path
         name: id
         required: true
         type: string
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
@@ -226,12 +364,21 @@ paths:
       tags:
       - Order_GetOne
     patch:
+      consumes:
+      - application/json
       parameters:
       - description: id of order
         in: path
         name: id
         required: true
         type: string
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
@@ -239,14 +386,6 @@ paths:
             type: string
       tags:
       - Order_Update
-    post:
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      tags:
-      - Order_Create
   /orders/cancel/{id}:
     patch:
       consumes:
@@ -257,13 +396,7 @@ paths:
         name: id
         required: true
         type: string
-      - description: Order_cancel
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/orders.OrderCancelInput'
-      - description: MyHeader must be set for valid response
+      - description: Header must be set for valid response
         in: header
         name: Authorization
         required: true
@@ -280,67 +413,116 @@ paths:
           schema:
             $ref: '#/definitions/types.ErrMsg'
       tags:
-      - Order_cancel
+      - Order_Cancel
   /product/{id}:
     delete:
+      consumes:
+      - application/json
       parameters:
       - description: id of product
         in: path
         name: id
         required: true
         type: string
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            $ref: '#/definitions/products.ProductDeleteResponse'
       tags:
       - Product_Delete
     patch:
-      description: Product update
+      consumes:
+      - application/json
       parameters:
       - description: id of product
         in: path
         name: id
         required: true
         type: string
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            $ref: '#/definitions/products.ProductUpdateResponse'
       tags:
       - Product_Update
   /products:
     get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            items:
+              $ref: '#/definitions/products.ProductGetAllResponse'
+            type: array
       tags:
       - Product_GetAll
     post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product_Create
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/products.ProductCreateInput'
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            $ref: '#/definitions/products.ProductCreateResponse'
       tags:
       - Product_Create
   /products/{id}:
     get:
+      consumes:
+      - application/json
       parameters:
       - description: id of product
         in: path
         name: id
         required: true
         type: string
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            $ref: '#/definitions/products.ProductGetOneResponse'
       tags:
       - Product_GetOne
 swagger: "2.0"
