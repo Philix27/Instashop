@@ -16,7 +16,7 @@ func CheckAuthorization(ap *config.AppState, requiredRole gorbac.Permission) ech
 		return func(c echo.Context) error {
 			tokenString := c.Request().Header.Get("Authorization")[7:] //Remove "Bearer " prefix
 
-			err, _, userRole := crypto.ValidateAndGetTokenPayload(ap.Env.JwtSecretKey, tokenString)
+			err, userId, userRole := crypto.ValidateAndGetTokenPayload(ap.Env.JwtSecretKey, tokenString)
 
 			if err != nil {
 				return c.JSON(http.StatusUnauthorized, types.ErrMsg{
@@ -40,6 +40,8 @@ func CheckAuthorization(ap *config.AppState, requiredRole gorbac.Permission) ech
 				})
 			}
 
+			c.Set("userRole", userRole)
+			c.Set("userId", userId)
 			return next(c)
 		}
 	}

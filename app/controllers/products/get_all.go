@@ -29,7 +29,7 @@ func ProductGetAll(ap config.AppState) echo.HandlerFunc {
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, types.ErrMsg{
-				Error: "Could not delete product",
+				Error: "Could not fetch products",
 			})
 		}
 

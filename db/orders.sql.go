@@ -7,9 +7,29 @@ package db
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const orders_Create = `-- name: Orders_Create :one
+INSERT INTO orders (
+  user_id
+) VALUES (
+  $1
+)
+RETURNING id, user_id, order_status, created_at, updated_at
+`
+
+func (q *Queries) Orders_Create(ctx context.Context, userID int32) (Order, error) {
+	row := q.db.QueryRow(ctx, orders_Create, userID)
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.OrderStatus,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
 
 const orders_GetAll = `-- name: Orders_GetAll :many
 SELECT id, user_id, order_status, created_at, updated_at FROM orders
@@ -48,7 +68,7 @@ WHERE user_id = $1
 ORDER BY created_at DESC
 `
 
-func (q *Queries) Orders_GetAllByUserId(ctx context.Context, userID pgtype.Int4) ([]Order, error) {
+func (q *Queries) Orders_GetAllByUserId(ctx context.Context, userID int32) ([]Order, error) {
 	rows, err := q.db.Query(ctx, orders_GetAllByUserId, userID)
 	if err != nil {
 		return nil, err
@@ -74,18 +94,18 @@ func (q *Queries) Orders_GetAllByUserId(ctx context.Context, userID pgtype.Int4)
 	return items, nil
 }
 
-const orders_Update = `-- name: Orders_Update :exec
+const orders_UpdateStatus = `-- name: Orders_UpdateStatus :exec
 UPDATE orders
   SET order_status = $2
 WHERE id = $1
 `
 
-type Orders_UpdateParams struct {
+type Orders_UpdateStatusParams struct {
 	ID          int64
-	OrderStatus NullOrderstatus
+	OrderStatus Orderstatus
 }
 
-func (q *Queries) Orders_Update(ctx context.Context, arg Orders_UpdateParams) error {
-	_, err := q.db.Exec(ctx, orders_Update, arg.ID, arg.OrderStatus)
+func (q *Queries) Orders_UpdateStatus(ctx context.Context, arg Orders_UpdateStatusParams) error {
+	_, err := q.db.Exec(ctx, orders_UpdateStatus, arg.ID, arg.OrderStatus)
 	return err
 }

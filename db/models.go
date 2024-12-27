@@ -15,8 +15,9 @@ type Orderstatus string
 
 const (
 	OrderstatusCREATED   Orderstatus = "CREATED"
+	OrderstatusCANCEL    Orderstatus = "CANCEL"
+	OrderstatusPENDING   Orderstatus = "PENDING"
 	OrderstatusCOMPLETED Orderstatus = "COMPLETED"
-	OrderstatusAPPEAL    Orderstatus = "APPEAL"
 )
 
 func (e *Orderstatus) Scan(src interface{}) error {
@@ -56,19 +57,20 @@ func (ns NullOrderstatus) Value() (driver.Value, error) {
 
 type Order struct {
 	ID          int64
-	UserID      pgtype.Int4
-	OrderStatus NullOrderstatus
+	UserID      int32
+	OrderStatus Orderstatus
 	CreatedAt   pgtype.Timestamp
 	UpdatedAt   pgtype.Timestamp
 }
 
 type OrderItem struct {
 	ID        int64
-	Quantity  int32
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
+	Quantity  int32
 	OrderID   pgtype.Int4
 	ProductID pgtype.Int4
+	UserID    pgtype.Int4
 }
 
 type Product struct {

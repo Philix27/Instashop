@@ -80,16 +80,16 @@ definitions:
     type: object
   orders.OrderCreateInput:
     properties:
-      email:
-        type: string
-      password:
-        type: string
+      orderId:
+        type: integer
+      productId:
+        type: integer
+      quantity:
+        type: integer
     type: object
   orders.OrderCreateResponse:
     properties:
-      UserId:
-        type: string
-      password:
+      message:
         type: string
     type: object
   orders.OrderGetAllResponse:
@@ -393,7 +393,7 @@ paths:
             type: string
       tags:
       - Order_GetOne
-    patch:
+    put:
       consumes:
       - application/json
       parameters:

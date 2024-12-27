@@ -21,19 +21,45 @@ func (q *Queries) OrderItem_ClearOrders(ctx context.Context) error {
 	return err
 }
 
-const orderItem_DecrementQuantity = `-- name: OrderItem_DecrementQuantity :exec
-UPDATE order_items
-  SET quantity = $2
+const orderItem_Create = `-- name: OrderItem_Create :exec
+INSERT INTO order_items (
+   quantity,
+   order_id,
+   product_id,  
+   user_id  
+) VALUES (
+  $1,
+  $2,
+  $3,
+  $4
+)
+RETURNING id, created_at, updated_at, quantity, order_id, product_id, user_id
+`
+
+type OrderItem_CreateParams struct {
+	Quantity  int32
+	OrderID   pgtype.Int4
+	ProductID pgtype.Int4
+	UserID    pgtype.Int4
+}
+
+func (q *Queries) OrderItem_Create(ctx context.Context, arg OrderItem_CreateParams) error {
+	_, err := q.db.Exec(ctx, orderItem_Create,
+		arg.Quantity,
+		arg.OrderID,
+		arg.ProductID,
+		arg.UserID,
+	)
+	return err
+}
+
+const orderItem_DeleteById = `-- name: OrderItem_DeleteById :exec
+DELETE FROM order_items
 WHERE id = $1
 `
 
-type OrderItem_DecrementQuantityParams struct {
-	ID       int64
-	Quantity int32
-}
-
-func (q *Queries) OrderItem_DecrementQuantity(ctx context.Context, arg OrderItem_DecrementQuantityParams) error {
-	_, err := q.db.Exec(ctx, orderItem_DecrementQuantity, arg.ID, arg.Quantity)
+func (q *Queries) OrderItem_DeleteById(ctx context.Context, id int64) error {
+	_, err := q.db.Exec(ctx, orderItem_DeleteById, id)
 	return err
 }
 
@@ -52,18 +78,8 @@ func (q *Queries) OrderItem_DeleteItem(ctx context.Context, arg OrderItem_Delete
 	return err
 }
 
-const orderItem_DeleteOne = `-- name: OrderItem_DeleteOne :exec
-DELETE FROM order_items
-WHERE id = $1
-`
-
-func (q *Queries) OrderItem_DeleteOne(ctx context.Context, id int64) error {
-	_, err := q.db.Exec(ctx, orderItem_DeleteOne, id)
-	return err
-}
-
 const orderItem_GetAll = `-- name: OrderItem_GetAll :many
-SELECT id, quantity, created_at, updated_at, order_id, product_id FROM order_items
+SELECT id, created_at, updated_at, quantity, order_id, product_id, user_id FROM order_items
 ORDER BY created_at DESC
 `
 
@@ -78,11 +94,12 @@ func (q *Queries) OrderItem_GetAll(ctx context.Context) ([]OrderItem, error) {
 		var i OrderItem
 		if err := rows.Scan(
 			&i.ID,
-			&i.Quantity,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Quantity,
 			&i.OrderID,
 			&i.ProductID,
+			&i.UserID,
 		); err != nil {
 			return nil, err
 		}
@@ -95,7 +112,7 @@ func (q *Queries) OrderItem_GetAll(ctx context.Context) ([]OrderItem, error) {
 }
 
 const orderItem_GetAllOrderId = `-- name: OrderItem_GetAllOrderId :many
-SELECT id, quantity, created_at, updated_at, order_id, product_id FROM order_items
+SELECT id, created_at, updated_at, quantity, order_id, product_id, user_id FROM order_items
 WHERE order_id = $1
 ORDER BY created_at DESC
 `
@@ -111,11 +128,12 @@ func (q *Queries) OrderItem_GetAllOrderId(ctx context.Context, orderID pgtype.In
 		var i OrderItem
 		if err := rows.Scan(
 			&i.ID,
-			&i.Quantity,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Quantity,
 			&i.OrderID,
 			&i.ProductID,
+			&i.UserID,
 		); err != nil {
 			return nil, err
 		}
@@ -127,18 +145,18 @@ func (q *Queries) OrderItem_GetAllOrderId(ctx context.Context, orderID pgtype.In
 	return items, nil
 }
 
-const orderItem_IncrementQuantity = `-- name: OrderItem_IncrementQuantity :exec
+const orderItem_Update = `-- name: OrderItem_Update :exec
 UPDATE order_items
   SET quantity = $2
 WHERE id = $1
 `
 
-type OrderItem_IncrementQuantityParams struct {
+type OrderItem_UpdateParams struct {
 	ID       int64
 	Quantity int32
 }
 
-func (q *Queries) OrderItem_IncrementQuantity(ctx context.Context, arg OrderItem_IncrementQuantityParams) error {
-	_, err := q.db.Exec(ctx, orderItem_IncrementQuantity, arg.ID, arg.Quantity)
+func (q *Queries) OrderItem_Update(ctx context.Context, arg OrderItem_UpdateParams) error {
+	_, err := q.db.Exec(ctx, orderItem_Update, arg.ID, arg.Quantity)
 	return err
 }

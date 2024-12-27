@@ -2,6 +2,7 @@ package orders
 
 import (
 	"instashop/infra/config"
+	"instashop/infra/types"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -20,9 +21,16 @@ type OrderGetAllResponse struct {
 // @Param		Authorization	header	string	true	"Header must be set for valid response"
 // @Accept		json
 // @Produce	json
-func OrderGetAll(appState config.AppState) echo.HandlerFunc {
+func OrderGetAll(ap config.AppState) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		product_id := c.Param("id")
-		return c.String(http.StatusOK, product_id)
+		orderItems, err := ap.DbQueries.OrderItem_GetAll(ap.Ctx)
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, types.ErrMsg{
+				Error: "Could fetch product",
+			})
+		}
+
+		return c.JSON(http.StatusOK, orderItems)
 	}
 }

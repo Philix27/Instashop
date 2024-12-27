@@ -325,7 +325,7 @@ const docTemplate = `{
                     }
                 }
             },
-            "delete": {
+            "put": {
                 "consumes": [
                     "application/json"
                 ],
@@ -333,7 +333,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Order_Delete"
+                    "Order_Update"
                 ],
                 "parameters": [
                     {
@@ -360,7 +360,7 @@ const docTemplate = `{
                     }
                 }
             },
-            "patch": {
+            "delete": {
                 "consumes": [
                     "application/json"
                 ],
@@ -368,7 +368,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Order_Update"
+                    "Order_Delete"
                 ],
                 "parameters": [
                     {
@@ -706,21 +706,21 @@ const docTemplate = `{
         "orders.OrderCreateInput": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
+                "orderId": {
+                    "type": "integer"
                 },
-                "password": {
-                    "type": "string"
+                "productId": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
                 }
             }
         },
         "orders.OrderCreateResponse": {
             "type": "object",
             "properties": {
-                "UserId": {
-                    "type": "string"
-                },
-                "password": {
+                "message": {
                     "type": "string"
                 }
             }
