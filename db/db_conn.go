@@ -17,7 +17,6 @@ func Connect(dbUrl string) (*Queries, context.Context, *pgx.Conn) {
 	}
 
 	// defer conn.Close(ctx)
-
 	fmt.Println("Connected to the database!")
 
 	queries := New(conn)

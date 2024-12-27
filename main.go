@@ -17,16 +17,16 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
-//	@title			Instashop Swagger API
-//	@version		1.0
-//	@description	This is a simple e-commerce server.
-//	@termsOfService	http://swagger.io/terms/
-//	@contact.name	API Support
-//	@contact.url	http://www.swagger.io/support
-//	@contact.email	instashop@swagger.io
-//	@license.name	Apache 2.0
-//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
-// @host	localhost:1323
+// @title			Instashop Swagger API
+// @version		1.0
+// @description	This is a simple e-commerce server.
+// @termsOfService	http://swagger.io/terms/
+// @contact.name	API Support
+// @contact.url	http://www.swagger.io/support
+// @contact.email	instashop@swagger.io
+// @license.name	Apache 2.0
+// @license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+// @host			localhost:1323
 func main() {
 	envConfig := appConfig.SetupEnv()
 	queries, ctx, conn := db.Connect(envConfig.DbUrl)

@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const product_Update = `-- name: Product_Update :exec
@@ -20,8 +22,8 @@ WHERE id = $1
 type Product_UpdateParams struct {
 	ID          int64
 	Title       string
-	Description string
-	ImageUrl    string
+	Description pgtype.Text
+	ImageUrl    pgtype.Text
 }
 
 func (q *Queries) Product_Update(ctx context.Context, arg Product_UpdateParams) error {
@@ -49,8 +51,8 @@ RETURNING id, title, description, image_url, price, stock, created_at, updated_a
 
 type Products_CreateParams struct {
 	Title       string
-	Description string
-	ImageUrl    string
+	Description pgtype.Text
+	ImageUrl    pgtype.Text
 }
 
 func (q *Queries) Products_Create(ctx context.Context, arg Products_CreateParams) (Product, error) {

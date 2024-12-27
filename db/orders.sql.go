@@ -12,7 +12,7 @@ import (
 )
 
 const orders_GetAll = `-- name: Orders_GetAll :many
-SELECT id, user_id, order_status, items, created_at, updated_at FROM orders
+SELECT id, user_id, order_status, created_at, updated_at FROM orders
 ORDER BY created_at DESC
 `
 
@@ -29,7 +29,6 @@ func (q *Queries) Orders_GetAll(ctx context.Context) ([]Order, error) {
 			&i.ID,
 			&i.UserID,
 			&i.OrderStatus,
-			&i.Items,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -44,7 +43,7 @@ func (q *Queries) Orders_GetAll(ctx context.Context) ([]Order, error) {
 }
 
 const orders_GetAllByUserId = `-- name: Orders_GetAllByUserId :many
-SELECT id, user_id, order_status, items, created_at, updated_at FROM orders
+SELECT id, user_id, order_status, created_at, updated_at FROM orders
 WHERE user_id = $1
 ORDER BY created_at DESC
 `
@@ -62,7 +61,6 @@ func (q *Queries) Orders_GetAllByUserId(ctx context.Context, userID pgtype.Int4)
 			&i.ID,
 			&i.UserID,
 			&i.OrderStatus,
-			&i.Items,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {

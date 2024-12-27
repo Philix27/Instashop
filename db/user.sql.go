@@ -7,34 +7,7 @@ package db
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
-
-const kyc_UpdateCredentials = `-- name: Kyc_UpdateCredentials :exec
-UPDATE users
-  SET first_name = $2,
-  last_name = $3,
-  phone = $4
-WHERE id = $1
-`
-
-type Kyc_UpdateCredentialsParams struct {
-	ID        int64
-	FirstName pgtype.Text
-	LastName  pgtype.Text
-	Phone     pgtype.Text
-}
-
-func (q *Queries) Kyc_UpdateCredentials(ctx context.Context, arg Kyc_UpdateCredentialsParams) error {
-	_, err := q.db.Exec(ctx, kyc_UpdateCredentials,
-		arg.ID,
-		arg.FirstName,
-		arg.LastName,
-		arg.Phone,
-	)
-	return err
-}
 
 const user_Create = `-- name: User_Create :one
 INSERT INTO users (
@@ -44,7 +17,7 @@ INSERT INTO users (
   $1,
   $2
 )
-RETURNING id, wallets, first_name, last_name, middle_name, dob, email, phone, hashed_password, created_at, updated_at
+RETURNING id, email, hashed_password, created_at, updated_at
 `
 
 type User_CreateParams struct {
@@ -57,13 +30,7 @@ func (q *Queries) User_Create(ctx context.Context, arg User_CreateParams) (User,
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Wallets,
-		&i.FirstName,
-		&i.LastName,
-		&i.MiddleName,
-		&i.Dob,
 		&i.Email,
-		&i.Phone,
 		&i.HashedPassword,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -72,7 +39,7 @@ func (q *Queries) User_Create(ctx context.Context, arg User_CreateParams) (User,
 }
 
 const user_GetByEmail = `-- name: User_GetByEmail :one
-SELECT id, wallets, first_name, last_name, middle_name, dob, email, phone, hashed_password, created_at, updated_at FROM users
+SELECT id, email, hashed_password, created_at, updated_at FROM users
 WHERE email = $1 LIMIT 1
 `
 
@@ -81,13 +48,7 @@ func (q *Queries) User_GetByEmail(ctx context.Context, email string) (User, erro
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Wallets,
-		&i.FirstName,
-		&i.LastName,
-		&i.MiddleName,
-		&i.Dob,
 		&i.Email,
-		&i.Phone,
 		&i.HashedPassword,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -97,7 +58,7 @@ func (q *Queries) User_GetByEmail(ctx context.Context, email string) (User, erro
 
 const user_GetById = `-- name: User_GetById :one
 
-SELECT id, wallets, first_name, last_name, middle_name, dob, email, phone, hashed_password, created_at, updated_at FROM users
+SELECT id, email, hashed_password, created_at, updated_at FROM users
 WHERE id = $1 LIMIT 1
 `
 
@@ -107,34 +68,12 @@ func (q *Queries) User_GetById(ctx context.Context, id int64) (User, error) {
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Wallets,
-		&i.FirstName,
-		&i.LastName,
-		&i.MiddleName,
-		&i.Dob,
 		&i.Email,
-		&i.Phone,
 		&i.HashedPassword,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
-}
-
-const user_PhoneNumber = `-- name: User_PhoneNumber :exec
-UPDATE users
-  SET phone = $2
-WHERE id = $1
-`
-
-type User_PhoneNumberParams struct {
-	ID    int64
-	Phone pgtype.Text
-}
-
-func (q *Queries) User_PhoneNumber(ctx context.Context, arg User_PhoneNumberParams) error {
-	_, err := q.db.Exec(ctx, user_PhoneNumber, arg.ID, arg.Phone)
-	return err
 }
 
 const user_ResetPassword = `-- name: User_ResetPassword :exec
@@ -150,33 +89,5 @@ type User_ResetPasswordParams struct {
 
 func (q *Queries) User_ResetPassword(ctx context.Context, arg User_ResetPasswordParams) error {
 	_, err := q.db.Exec(ctx, user_ResetPassword, arg.ID, arg.HashedPassword)
-	return err
-}
-
-const user_Update = `-- name: User_Update :exec
-UPDATE users
-  SET first_name = $2,
-  last_name = $3,
-  middle_name = $4,
-  dob = $5
-WHERE id = $1
-`
-
-type User_UpdateParams struct {
-	ID         int64
-	FirstName  pgtype.Text
-	LastName   pgtype.Text
-	MiddleName pgtype.Text
-	Dob        pgtype.Timestamp
-}
-
-func (q *Queries) User_Update(ctx context.Context, arg User_UpdateParams) error {
-	_, err := q.db.Exec(ctx, user_Update,
-		arg.ID,
-		arg.FirstName,
-		arg.LastName,
-		arg.MiddleName,
-		arg.Dob,
-	)
 	return err
 }
