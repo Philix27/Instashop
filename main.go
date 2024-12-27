@@ -5,6 +5,7 @@ import (
 	"instashop/db"
 	_ "instashop/docs"
 	appConfig "instashop/infra/config"
+	"instashop/infra/rbac"
 	"net/http"
 	"time"
 
@@ -35,12 +36,17 @@ func main() {
 
 	defer conn.Close(ctx)
 
+	// Initialize RBAC
+	accessControl := rbac.InitRBAC()
+
 	appState := appConfig.AppState{
 		DbQueries: queries,
 		Ctx:       ctx,
+		Rbac:      accessControl,
 	}
 
 	e := echo.New()
+
 	e.Use(middleware.Logger())
 	// e.Use(middleware.CSRF())
 	// e.Use(echojwt.JWT([]byte("secret")))

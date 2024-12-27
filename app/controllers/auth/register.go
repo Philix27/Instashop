@@ -2,6 +2,7 @@ package auth
 
 import (
 	"instashop/app/models"
+	"instashop/db"
 	"instashop/infra/config"
 	"instashop/infra/crypto"
 	"instashop/infra/types"
@@ -18,7 +19,7 @@ import (
 // @Accept		json
 // @Produce	json
 // @Failure	400	{object}	types.ErrMsg	"error"
-func AuthRegister(appState config.AppState) echo.HandlerFunc {
+func AuthRegister(ap config.AppState) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		dto := new(models.RegisterInput)
 
@@ -48,10 +49,13 @@ func AuthRegister(appState config.AppState) echo.HandlerFunc {
 			})
 		}
 
-		// todo: create user on db
-		println("hashedPassword", hashedPassword)
+		user, err := ap.DbQueries.User_Create(ap.Ctx, db.User_CreateParams{
+			Email:          dto.Email,
+			HashedPassword: hashedPassword,
+		})
+
 		return c.JSON(http.StatusCreated, models.RegisterResponse{
-			Message: "Account for " + dto.Email + "created successfully",
+			Message: "Account for " + user.Email + "created successfully",
 		})
 	}
 }
