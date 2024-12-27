@@ -16,7 +16,7 @@ type AppEnv struct {
 	DbUrl        string
 	ResendKey    string
 	ResendDomain string
-	JwtSecretKey string
+	JwtSecretKey []byte
 }
 
 func SetupEnv() *AppEnv {
@@ -24,6 +24,7 @@ func SetupEnv() *AppEnv {
 		println("Could not load env")
 	}
 
+	jwt := os.Getenv("JWT_SECRET_KEY")
 	config := &AppEnv{
 		Host:         os.Getenv("DB_HOST"),
 		Port:         os.Getenv("DB_PORT"),
@@ -34,7 +35,7 @@ func SetupEnv() *AppEnv {
 		DbUrl:        os.Getenv("DB_URL"),
 		ResendKey:    os.Getenv("RESEND_API_KEY"),
 		ResendDomain: os.Getenv("RESEND_DOMAIN"),
-		JwtSecretKey: os.Getenv("JWT_SECRET_KEY"),
+		JwtSecretKey: []byte(jwt),
 	}
 	return config
 }

@@ -30,13 +30,13 @@ func AuthSendEmailOtp(ap config.AppState) echo.HandlerFunc {
 		}
 
 		otpValue := crypto.GenerateOTP()
+
 		token, err := crypto.CreateJWTToken(ap.Env.JwtSecretKey, otpValue, "guest", time.Minute*10)
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, types.ErrMsg{Error: "Something went wrong"})
+			return c.JSON(http.StatusInternalServerError, types.ErrMsg{Error: err.Error()})
+			// return c.JSON(http.StatusInternalServerError, types.ErrMsg{Error: "Something went wrong"})
 		}
-
-		println("Otp value", otpValue)
 
 		//  todo: Send otp value to user email via a desired email provider such as resend or twilo
 
