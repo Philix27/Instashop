@@ -19,7 +19,7 @@ import (
 // @Accept		json
 // @Produce	json
 // @Failure	400	{object}	types.ErrMsg	"error"
-func AuthVerifyOtp(appState config.AppState) echo.HandlerFunc {
+func AuthVerifyOtp(ap config.AppState) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		dto := new(models.VerifyOtpInput)
@@ -30,13 +30,13 @@ func AuthVerifyOtp(appState config.AppState) echo.HandlerFunc {
 			})
 		}
 
-		if !crypto.ValidateAndCompareClaimToken(dto.Token, dto.Otp) {
+		if !crypto.ValidateAndCompareClaimToken(ap.Env.JwtSecretKey, dto.Token, dto.Otp) {
 			return c.JSON(http.StatusBadRequest, types.ErrMsg{
 				Error: "Invalid Otp",
 			})
 		}
 
-		aToken, err := crypto.CreateJWTToken(dto.Email, time.Minute*30)
+		aToken, err := crypto.CreateJWTToken(ap.Env.JwtSecretKey, dto.Email, "guest", time.Minute*30)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, types.ErrMsg{
 				Error: "Error in generating token",

@@ -16,6 +16,7 @@ type AppEnv struct {
 	DbUrl        string
 	ResendKey    string
 	ResendDomain string
+	JwtSecretKey string
 }
 
 func SetupEnv() *AppEnv {
@@ -33,6 +34,7 @@ func SetupEnv() *AppEnv {
 		DbUrl:        os.Getenv("DB_URL"),
 		ResendKey:    os.Getenv("RESEND_API_KEY"),
 		ResendDomain: os.Getenv("RESEND_DOMAIN"),
+		JwtSecretKey: os.Getenv("JWT_SECRET_KEY"),
 	}
 	return config
 }

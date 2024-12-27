@@ -11,4 +11,5 @@ type AppState struct {
 	DbQueries *db.Queries
 	Ctx       context.Context
 	Rbac      *gorbac.RBAC
+	Env       *AppEnv
 }

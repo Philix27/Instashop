@@ -31,8 +31,8 @@ import (
 
 // @host	localhost:1323
 func main() {
-	config := appConfig.SetupEnv()
-	queries, ctx, conn := db.Connect(config.DbUrl)
+	envConfig := appConfig.SetupEnv()
+	queries, ctx, conn := db.Connect(envConfig.DbUrl)
 
 	defer conn.Close(ctx)
 
@@ -43,6 +43,7 @@ func main() {
 		DbQueries: queries,
 		Ctx:       ctx,
 		Rbac:      accessControl,
+		Env:       envConfig,
 	}
 
 	e := echo.New()

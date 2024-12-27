@@ -35,7 +35,7 @@ func AuthRegister(ap config.AppState) echo.HandlerFunc {
 			})
 		}
 
-		if !crypto.ValidateAndCompareClaimToken(dto.Token, dto.Email) {
+		if !crypto.ValidateAndCompareClaimToken(ap.Env.JwtSecretKey, dto.Token, dto.Email) {
 			return c.JSON(http.StatusBadRequest, types.ErrMsg{
 				Error: "Invalid token",
 			})

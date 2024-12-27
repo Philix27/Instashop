@@ -9,49 +9,29 @@ import (
 )
 
 // ValidateJWTToken validates a JWT token and checks if a specific claim matches the expected value
-func ValidateAndGetTokenPayload(tokenString string) (error, string) {
-	// Parse and validate the token
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Ensure the signing method is what you expect (HMAC-SHA256 in this case)
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-		}
-		return secretKey, nil
-	})
-
-	if err != nil {
-		return errors.New("invalid token"), ""
-	}
-
-	// Check if the token is valid
-	if !token.Valid {
-		return fmt.Errorf("token is not valid"), ""
-	}
+func ValidateAndGetTokenPayload(secretKey string, tokenString string) (err error, payload string, role string) {
 
 	// Extract and validate claims
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return fmt.Errorf("failed to parse claims"), ""
-	}
+	err, claims := validate(secretKey, tokenString)
 
-	// Validate expiration (optional, as it's included in the library's checks)
-	if exp, ok := claims["exp"].(float64); ok {
-		if time.Now().Unix() > int64(exp) {
-			return fmt.Errorf("token has expired"), ""
-		}
+	if err != nil {
+		return errors.New("invalid token"), "", ""
 	}
-
 	// Check if the expected claim exists and matches the expected value
-	claimValue, ok := claims["payload"].(string)
+	payload, ok := claims["payload"].(string)
 	if !ok {
-		return fmt.Errorf("No payload"), ""
+		return fmt.Errorf("No payload"), "", ""
 	}
 
-	return nil, claimValue
+	role, ok = claims["role"].(string)
+	if !ok {
+		return fmt.Errorf("No role provided"), "", ""
+	}
+
+	return
 }
 
-func getClaim(tokenString string) (error, string) {
-	// Parse and validate the token
+func validate(secretKey string, tokenString string) (err error, claim jwt.MapClaims) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Ensure the signing method is what you expect (HMAC-SHA256 in this case)
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -61,32 +41,26 @@ func getClaim(tokenString string) (error, string) {
 	})
 
 	if err != nil {
-		return errors.New("invalid token"), ""
+		return errors.New("invalid token"), nil
 	}
 
 	// Check if the token is valid
 	if !token.Valid {
-		return fmt.Errorf("token is not valid"), ""
+		return fmt.Errorf("token is not valid"), nil
 	}
 
 	// Extract and validate claims
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return fmt.Errorf("failed to parse claims"), ""
+		return fmt.Errorf("failed to parse claims"), nil
 	}
 
 	// Validate expiration (optional, as it's included in the library's checks)
 	if exp, ok := claims["exp"].(float64); ok {
 		if time.Now().Unix() > int64(exp) {
-			return fmt.Errorf("token has expired"), ""
+			return fmt.Errorf("token has expired"), nil
 		}
 	}
 
-	// Check if the expected claim exists and matches the expected value
-	claimValue, ok := claims["payload"].(string)
-	if !ok {
-		return fmt.Errorf("No payload"), ""
-	}
-
-	return nil, claimValue
+	return nil, claims
 }
