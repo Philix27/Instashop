@@ -19,7 +19,7 @@ import (
 // @Accept		json
 // @Produce	json
 // @Failure	400	{object}	types.ErrMsg	"error"
-func AuthSendEmailOtp(appState config.AppState) echo.HandlerFunc {
+func AuthSendEmailOtp(ap config.AppState) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		dto := new(models.SendEmailOtpInput)
 
@@ -30,7 +30,7 @@ func AuthSendEmailOtp(appState config.AppState) echo.HandlerFunc {
 		}
 
 		otpValue := crypto.GenerateOTP()
-		token, err := crypto.CreateJWTToken(otpValue, time.Minute*10)
+		token, err := crypto.CreateJWTToken(ap.Env.JwtSecretKey, otpValue, "guest", time.Minute*10)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, types.ErrMsg{Error: "Something went wrong"})
