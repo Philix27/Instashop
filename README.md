@@ -7,15 +7,19 @@ A simple REST API application for managing an e-commerce platform
 
 - API Router: [Echo](https://echo.labstack.com/)
 - Database Queries: [SQLC](https://github.com/sqlc-dev/sqlc) 
-- Database Migration: [Migrate](https://github.com/golang-migrate/migrate)
-- Documentation: [Swaggo](https://github.com/swaggo/swag)
+- Database Migration: [Go Migrate](https://github.com/golang-migrate/migrate)
+- API Documentation: [Swaggo](https://github.com/swaggo/swag)
+- RBAC: [Gorbac](https://github.com/mikespook/gorbac)
 
 
 ### Requirement
 
 - Docker
 - SQLC
+- Swag
+- Migrate
 
+____
 
 ### Getting started
 
@@ -56,6 +60,7 @@ Bearer ey.....
   - Update products
 - Both User and Admin role can read orders
 
+___
 ### Commands
 
 Most of the commands have been mapped to a Makefile

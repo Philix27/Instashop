@@ -11,15 +11,22 @@ import (
 
 const orders_Create = `-- name: Orders_Create :one
 INSERT INTO orders (
-  user_id
+  user_id,
+  order_status
 ) VALUES (
-  $1
+  $1,
+  $2
 )
 RETURNING id, user_id, order_status, created_at, updated_at
 `
 
-func (q *Queries) Orders_Create(ctx context.Context, userID int32) (Order, error) {
-	row := q.db.QueryRow(ctx, orders_Create, userID)
+type Orders_CreateParams struct {
+	UserID      int32
+	OrderStatus Orderstatus
+}
+
+func (q *Queries) Orders_Create(ctx context.Context, arg Orders_CreateParams) (Order, error) {
+	row := q.db.QueryRow(ctx, orders_Create, arg.UserID, arg.OrderStatus)
 	var i Order
 	err := row.Scan(
 		&i.ID,
@@ -70,6 +77,38 @@ ORDER BY created_at DESC
 
 func (q *Queries) Orders_GetAllByUserId(ctx context.Context, userID int32) ([]Order, error) {
 	rows, err := q.db.Query(ctx, orders_GetAllByUserId, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Order
+	for rows.Next() {
+		var i Order
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.OrderStatus,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const orders_GetById = `-- name: Orders_GetById :many
+SELECT id, user_id, order_status, created_at, updated_at FROM orders
+WHERE id = $1
+ORDER BY created_at DESC
+`
+
+func (q *Queries) Orders_GetById(ctx context.Context, id int64) ([]Order, error) {
+	rows, err := q.db.Query(ctx, orders_GetById, id)
 	if err != nil {
 		return nil, err
 	}

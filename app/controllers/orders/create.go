@@ -44,17 +44,20 @@ func OrderCreate(ap config.AppState) echo.HandlerFunc {
 				Error: "Invalid user id",
 			})
 		}
-
+		var currentOrderId db.Order
 		//! Check if an order exist
-		orders, err := ap.DbQueries.Orders_GetAllByUserId(ap.Ctx, int32(userIdNum))
+		orders, err := ap.DbQueries.Orders_GetById(ap.Ctx, int64(dto.OrderId))
 
 		if len(orders) < 1 {
 			//! Create new order
-			order, err := ap.DbQueries.Orders_Create(ap.Ctx, int32(userIdNum))
+			currentOrderId, err = ap.DbQueries.Orders_Create(ap.Ctx, db.Orders_CreateParams{
+				UserID:      int32(userIdNum),
+				OrderStatus: db.OrderstatusCREATED,
+			})
 
 			if err != nil {
 				return c.JSON(http.StatusInternalServerError, types.ErrMsg{
-					Error: "Could not create order",
+					Error: "Could not create order ",
 				})
 			}
 
@@ -62,7 +65,22 @@ func OrderCreate(ap config.AppState) echo.HandlerFunc {
 			err = ap.DbQueries.OrderItem_Create(ap.Ctx, db.OrderItem_CreateParams{
 				Quantity: dto.Quantity,
 				OrderID: pgtype.Int4{
-					Int32: int32(order.ID),
+					Int32: int32(currentOrderId.ID),
+				},
+				ProductID: pgtype.Int4{
+					Int32: dto.ProductID,
+				},
+				UserID: pgtype.Int4{
+					Int32: int32(userIdNum),
+				},
+			})
+
+		} else {
+			//! Add an order item
+			err = ap.DbQueries.OrderItem_Create(ap.Ctx, db.OrderItem_CreateParams{
+				Quantity: dto.Quantity,
+				OrderID: pgtype.Int4{
+					Int32: int32(dto.OrderId),
 				},
 				ProductID: pgtype.Int4{
 					Int32: dto.ProductID,
@@ -72,20 +90,6 @@ func OrderCreate(ap config.AppState) echo.HandlerFunc {
 				},
 			})
 		}
-
-		//! Add an order item
-		err = ap.DbQueries.OrderItem_Create(ap.Ctx, db.OrderItem_CreateParams{
-			Quantity: dto.Quantity,
-			OrderID: pgtype.Int4{
-				Int32: int32(dto.OrderId),
-			},
-			ProductID: pgtype.Int4{
-				Int32: dto.ProductID,
-			},
-			UserID: pgtype.Int4{
-				Int32: int32(userIdNum),
-			},
-		})
 
 		return c.JSON(http.StatusCreated, OrderCreateResponse{
 			Message: "Order created successfully",
