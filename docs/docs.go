@@ -85,7 +85,7 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "success",
                         "schema": {
                             "$ref": "#/definitions/models.RegisterResponse"
@@ -574,7 +574,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "email",
-                "password"
+                "password",
+                "role"
             ],
             "properties": {
                 "email": {
@@ -582,16 +583,19 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         },
         "models.LoginResponse": {
             "type": "object",
             "properties": {
-                "UserId": {
+                "token": {
                     "type": "string"
                 },
-                "password": {
+                "userId": {
                     "type": "string"
                 }
             }

@@ -3,9 +3,13 @@ package auth
 import (
 	"instashop/app/models"
 	"instashop/infra/config"
+	"instashop/infra/crypto"
+	"instashop/infra/rbac/roles"
 	"instashop/infra/types"
 	"instashop/infra/validation"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -17,7 +21,7 @@ import (
 // @Accept		json
 // @Produce	json
 // @Failure	400	{object}	types.ErrMsg	"error"
-func AuthLogin(appState config.AppState) echo.HandlerFunc {
+func AuthLogin(ap config.AppState) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		dto := new(models.LoginInput)
 
@@ -26,8 +30,39 @@ func AuthLogin(appState config.AppState) echo.HandlerFunc {
 				Error: err.Error(),
 			})
 		}
+
+		user, err := ap.DbQueries.User_GetByEmail(ap.Ctx, dto.Email)
+
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, types.ErrMsg{
+				Error: "user not found",
+			})
+		}
+
+		if !crypto.PasswordMatch(user.HashedPassword, dto.Password) {
+			return c.JSON(http.StatusBadRequest, types.ErrMsg{
+				Error: "Invalid email and password",
+			})
+		}
+		userId := strconv.Itoa(int(user.ID))
+
+		token, err := crypto.CreateJWTToken(ap.Env.JwtSecretKey, userId, assignRole(dto.Role), time.Hour*24)
+
 		// todo: check db for user email and compare passwords
-		return c.JSON(http.StatusCreated, dto)
+		return c.JSON(http.StatusOK, models.LoginResponse{
+			AccessToken: token,
+			UserId:      userId,
+		})
 	}
 
+}
+
+func assignRole(role string) string {
+	if role == roles.Admin {
+		return roles.Admin
+	} else if role == roles.User {
+		return roles.User
+	} else {
+		return roles.Guest
+	}
 }

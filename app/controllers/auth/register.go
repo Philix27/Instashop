@@ -13,7 +13,7 @@ import (
 )
 
 // @Tags		Auth_Register
-// @Success	200		{object}	models.RegisterResponse	"success"
+// @Success	201		{object}	models.RegisterResponse	"success"
 // @Param		request	body		models.RegisterInput	true	"Auth_Register"
 // @Router		/auth/register [POST]
 // @Accept		json

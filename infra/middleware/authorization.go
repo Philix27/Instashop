@@ -17,7 +17,7 @@ func CheckAuthorization(ap *config.AppState, requiredRole gorbac.Permission) ech
 			println("Hello from user middleware")
 			tokenString := c.Request().Header.Get("Authorization")[7:] //Remove "Bearer " prefix
 
-			err, _, role := crypto.ValidateAndGetTokenPayload(ap.Env.JwtSecretKey, tokenString)
+			err, _, userRole := crypto.ValidateAndGetTokenPayload(ap.Env.JwtSecretKey, tokenString)
 
 			if err != nil {
 				return c.JSON(http.StatusUnauthorized, types.ErrMsg{
@@ -25,12 +25,11 @@ func CheckAuthorization(ap *config.AppState, requiredRole gorbac.Permission) ech
 				})
 			}
 
-			// Simulate user role (e.g., retrieve it from headers, JWT, or session)
-			userRole := c.Request().Header.Get(role)
-			if userRole == "" {
-				return c.JSON(http.StatusForbidden, types.ErrMsg{
-					Error: "role not provided"})
-			}
+			// if userRole != roles.Admin || userRole != roles.User {
+			// 	return c.JSON(http.StatusForbidden, types.ErrMsg{
+			// 		Error: "invalid role provided " + userRole,
+			// 	})
+			// }
 
 			// Check if user has the required role
 			if !ap.Rbac.IsGranted(userRole, gorbac.NewStdPermission(requiredRole.ID()), nil) {
