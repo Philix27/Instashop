@@ -132,3 +132,24 @@ func (q *Queries) Products_GetAll(ctx context.Context) ([]Product, error) {
 	}
 	return items, nil
 }
+
+const products_GetOne = `-- name: Products_GetOne :one
+SELECT id, title, description, image_url, price, stock, created_at, updated_at FROM products
+WHERE id = $1
+`
+
+func (q *Queries) Products_GetOne(ctx context.Context, id int64) (Product, error) {
+	row := q.db.QueryRow(ctx, products_GetOne, id)
+	var i Product
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Description,
+		&i.ImageUrl,
+		&i.Price,
+		&i.Stock,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}

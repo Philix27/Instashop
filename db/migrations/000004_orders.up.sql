@@ -1,7 +1,7 @@
 CREATE TABLE orders (
   id   BIGSERIAL PRIMARY KEY,
   user_id  INT NOT NULL REFERENCES users (id) UNIQUE,
-  order_status OrderStatus NOT NULL  DEFAULT "CREATED",
+  order_status OrderStatus NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

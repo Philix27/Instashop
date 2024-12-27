@@ -5,6 +5,7 @@ import (
 	"instashop/infra/config"
 	"instashop/infra/crypto"
 	"instashop/infra/types"
+	"instashop/infra/utils"
 	"instashop/infra/validation"
 	"net/http"
 	"time"
@@ -28,7 +29,11 @@ func AuthSendEmailOtp(ap config.AppState) echo.HandlerFunc {
 				Error: err.Error(),
 			})
 		}
-
+		if !utils.ValidateEmail(dto.Email) {
+			return c.JSON(http.StatusBadRequest, types.ErrMsg{
+				Error: "Invalid email adderss",
+			})
+		}
 		otpValue := crypto.GenerateOTP()
 
 		token, err := crypto.CreateJWTToken(ap.Env.JwtSecretKey, otpValue, "guest", time.Minute*10)

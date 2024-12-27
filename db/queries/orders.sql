@@ -7,10 +7,9 @@ SELECT * FROM orders
 WHERE user_id = $1
 ORDER BY created_at DESC;
 
--- name: Orders_GetById :many
+-- name: Orders_GetById :one
 SELECT * FROM orders
-WHERE id = $1
-ORDER BY created_at DESC;
+WHERE id = $1;
 
 -- name: Orders_UpdateStatus :exec
 UPDATE orders
@@ -23,6 +22,6 @@ INSERT INTO orders (
   order_status
 ) VALUES (
   $1,
-  $2
+  "CREATED"
 )
 RETURNING *;

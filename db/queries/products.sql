@@ -2,6 +2,10 @@
 SELECT * FROM products
 ORDER BY created_at DESC;
 
+-- name: Products_GetOne :one
+SELECT * FROM products
+WHERE id = $1;
+
 
 -- name: Products_Create :one
 INSERT INTO products (

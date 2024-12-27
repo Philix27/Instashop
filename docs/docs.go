@@ -26,6 +26,7 @@ const docTemplate = `{
     "paths": {
         "/auth/login": {
             "post": {
+                "description": "\"You can either login as a USER or an ADMIN. Case-sensitive roles\"",
                 "consumes": [
                     "application/json"
                 ],
@@ -255,7 +256,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Order_Cancel"
+                    "Order_UpdateStatus"
                 ],
                 "parameters": [
                     {
@@ -264,6 +265,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Order_UpdateStatus",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/orders.OrderUpdateStatusInput"
+                        }
                     },
                     {
                         "type": "string",
@@ -318,9 +328,12 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "success",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/orders.OrderGetOneResponse"
+                            }
                         }
                     }
                 }
@@ -599,7 +612,11 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "ADMIN",
+                        "USER"
+                    ]
                 }
             }
         },
@@ -698,7 +715,7 @@ const docTemplate = `{
         "orders.OrderCancelResponse": {
             "type": "object",
             "properties": {
-                "orderId": {
+                "message": {
                     "type": "string"
                 }
             }
@@ -739,6 +756,31 @@ const docTemplate = `{
                 },
                 "product3": {
                     "type": "string"
+                }
+            }
+        },
+        "orders.OrderGetOneResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "productId": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "orders.OrderUpdateStatusInput": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "CANCEL"
+                    ]
                 }
             }
         },
@@ -823,10 +865,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "price": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"

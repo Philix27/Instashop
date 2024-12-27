@@ -6,6 +6,9 @@ definitions:
       password:
         type: string
       role:
+        enum:
+        - ADMIN
+        - USER
         type: string
     required:
     - email
@@ -75,7 +78,7 @@ definitions:
     type: object
   orders.OrderCancelResponse:
     properties:
-      orderId:
+      message:
         type: string
     type: object
   orders.OrderCreateInput:
@@ -101,6 +104,22 @@ definitions:
       product2:
         type: string
       product3:
+        type: string
+    type: object
+  orders.OrderGetOneResponse:
+    properties:
+      id:
+        type: integer
+      productId:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+  orders.OrderUpdateStatusInput:
+    properties:
+      status:
+        enum:
+        - CANCEL
         type: string
     type: object
   products.ProductCreateInput:
@@ -157,9 +176,9 @@ definitions:
       description:
         type: string
       id:
-        type: string
+        type: integer
       price:
-        type: string
+        type: integer
       title:
         type: string
     type: object
@@ -209,6 +228,7 @@ paths:
     post:
       consumes:
       - application/json
+      description: '"You can either login as a USER or an ADMIN. Case-sensitive roles"'
       parameters:
       - description: Auth_Login
         in: body
@@ -388,9 +408,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: success
           schema:
-            type: string
+            items:
+              $ref: '#/definitions/orders.OrderGetOneResponse'
+            type: array
       tags:
       - Order_GetOne
     put:
@@ -426,6 +448,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: Order_UpdateStatus
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/orders.OrderUpdateStatusInput'
       - description: Header must be set for valid response
         in: header
         name: Authorization
@@ -443,7 +471,7 @@ paths:
           schema:
             $ref: '#/definitions/types.ErrMsg'
       tags:
-      - Order_Cancel
+      - Order_UpdateStatus
   /products:
     get:
       consumes:

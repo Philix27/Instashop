@@ -16,8 +16,6 @@ UPDATE order_items
   SET quantity = $2
 WHERE id = $1;
 
-
-
 -- name: OrderItem_ClearOrders :exec
 DELETE FROM order_items
 WHERE order_id = 1;

@@ -3,7 +3,7 @@ package models
 type LoginInput struct {
 	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required"`
-	Role     string `json:"role" validate:"required"`
+	Role     string `json:"role" validate:"required" enums:"ADMIN,USER"`
 }
 type LoginResponse struct {
 	UserId      string `json:"userId"`

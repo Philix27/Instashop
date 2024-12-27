@@ -6,6 +6,7 @@ import (
 	"instashop/infra/config"
 	"instashop/infra/crypto"
 	"instashop/infra/types"
+	"instashop/infra/utils"
 	"instashop/infra/validation"
 	"net/http"
 
@@ -32,6 +33,12 @@ func AuthRegister(ap config.AppState) echo.HandlerFunc {
 		if dto.Password != dto.ConfirmPassword {
 			return c.JSON(http.StatusBadRequest, types.ErrMsg{
 				Error: "Please confirm password",
+			})
+		}
+
+		if !utils.ValidateEmail(dto.Email) {
+			return c.JSON(http.StatusBadRequest, types.ErrMsg{
+				Error: "Invalid email adderss",
 			})
 		}
 

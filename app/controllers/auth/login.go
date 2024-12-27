@@ -14,13 +14,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// @Tags		Auth_Login
-// @Success	200		{object}	models.LoginResponse	"success"
-// @Param		request	body		models.LoginInput		true	"Auth_Login"
-// @Router		/auth/login [POST]
-// @Accept		json
-// @Produce	json
-// @Failure	400	{object}	types.ErrMsg	"error"
+//	@Tags			Auth_Login
+//	@Description	"You can either login as a USER or an ADMIN. Case-sensitive roles"
+//	@Success		200		{object}	models.LoginResponse	"success"
+//	@Param			request	body		models.LoginInput		true	"Auth_Login"
+//	@Router			/auth/login [POST]
+//	@Accept			json
+//	@Produce		json
+//	@Failure		400	{object}	types.ErrMsg	"error"
 func AuthLogin(ap config.AppState) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		dto := new(models.LoginInput)
