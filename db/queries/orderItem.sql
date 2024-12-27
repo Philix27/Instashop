@@ -26,3 +26,8 @@ WHERE order_id = $1 AND product_id = $2;
 -- name: OrderItem_ClearOrders :exec
 DELETE FROM order_items
 WHERE order_id = 1;
+
+
+-- name: OrderItem_DeleteOne :exec
+DELETE FROM order_items
+WHERE id = $1;

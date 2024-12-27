@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Registry(e *echo.Echo, appState config.AppState) {
+func RoutesRegistry(e *echo.Echo, appState config.AppState) {
 
 	e.POST("/users", users.UserCreate(appState))
 	e.GET("/users/", users.UserGetAll(appState), middleware.CheckAuthorization(&appState, permissions.UserGet))
@@ -28,10 +28,10 @@ func Registry(e *echo.Echo, appState config.AppState) {
 	e.POST("/products", products.ProductCreate(appState), middleware.CheckAuthorization(&appState, permissions.ProductCreate))
 	e.GET("/products", products.ProductGetAll(appState), middleware.CheckAuthorization(&appState, permissions.ProductGet))
 	e.GET("/products/:id", products.ProductGetOne(appState), middleware.CheckAuthorization(&appState, permissions.ProductGet))
-	e.PUT("/products/:id", products.ProductUpdate(appState), middleware.CheckAuthorization(&appState, permissions.ProductUpdate))
-	e.DELETE("/products/:id", products.ProductDelete(appState), middleware.CheckAuthorization(&appState, permissions.OrderDelete))
+	e.PATCH("/products/:id", products.ProductUpdate(appState), middleware.CheckAuthorization(&appState, permissions.ProductUpdate))
+	e.DELETE("/products/:id", products.ProductDelete(appState), middleware.CheckAuthorization(&appState, permissions.ProductDelete))
 
-	e.POST("/orders", orders.OrderCreate, middleware.CheckAuthorization(&appState, permissions.OrderCreate))
+	e.POST("/orders", orders.OrderCreate(appState), middleware.CheckAuthorization(&appState, permissions.OrderCreate))
 	e.GET("/orders", orders.OrderGetAll(appState), middleware.CheckAuthorization(&appState, permissions.OrderGet))
 	e.GET("/orders/:id", orders.OrderGetOne(appState), middleware.CheckAuthorization(&appState, permissions.OrderGet))
 	e.PUT("/orders/:id", orders.OrderUpdate(appState), middleware.CheckAuthorization(&appState, permissions.OrderUpdate))

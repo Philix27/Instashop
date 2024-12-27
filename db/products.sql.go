@@ -11,11 +11,23 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const product_Delete = `-- name: Product_Delete :exec
+DELETE FROM products
+WHERE id = $1
+`
+
+func (q *Queries) Product_Delete(ctx context.Context, id int64) error {
+	_, err := q.db.Exec(ctx, product_Delete, id)
+	return err
+}
+
 const product_Update = `-- name: Product_Update :exec
 UPDATE products
   SET title = $2,
   description = $3,
-  image_url = $4
+  stock = $4,
+  image_url = $5,
+  price = $6
 WHERE id = $1
 `
 
@@ -23,7 +35,9 @@ type Product_UpdateParams struct {
 	ID          int64
 	Title       string
 	Description pgtype.Text
+	Stock       int32
 	ImageUrl    pgtype.Text
+	Price       int32
 }
 
 func (q *Queries) Product_Update(ctx context.Context, arg Product_UpdateParams) error {
@@ -31,7 +45,9 @@ func (q *Queries) Product_Update(ctx context.Context, arg Product_UpdateParams) 
 		arg.ID,
 		arg.Title,
 		arg.Description,
+		arg.Stock,
 		arg.ImageUrl,
+		arg.Price,
 	)
 	return err
 }
@@ -40,11 +56,15 @@ const products_Create = `-- name: Products_Create :one
 INSERT INTO products (
   title,
   description,
+  price,
+  stock,
   image_url
 ) VALUES (
   $1,
   $2,
-  $3
+  $3,
+  $4,
+  $5
 )
 RETURNING id, title, description, image_url, price, stock, created_at, updated_at
 `
@@ -52,11 +72,19 @@ RETURNING id, title, description, image_url, price, stock, created_at, updated_a
 type Products_CreateParams struct {
 	Title       string
 	Description pgtype.Text
+	Price       int32
+	Stock       int32
 	ImageUrl    pgtype.Text
 }
 
 func (q *Queries) Products_Create(ctx context.Context, arg Products_CreateParams) (Product, error) {
-	row := q.db.QueryRow(ctx, products_Create, arg.Title, arg.Description, arg.ImageUrl)
+	row := q.db.QueryRow(ctx, products_Create,
+		arg.Title,
+		arg.Description,
+		arg.Price,
+		arg.Stock,
+		arg.ImageUrl,
+	)
 	var i Product
 	err := row.Scan(
 		&i.ID,
