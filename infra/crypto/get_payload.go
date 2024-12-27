@@ -9,7 +9,7 @@ import (
 )
 
 // ValidateJWTToken validates a JWT token and checks if a specific claim matches the expected value
-func ValidateAndGetTokenPayload(secretKey string, tokenString string) (err error, payload string, role string) {
+func ValidateAndGetTokenPayload(secretKey []byte, tokenString string) (err error, payload string, role string) {
 
 	// Extract and validate claims
 	err, claims := validate(secretKey, tokenString)
@@ -31,7 +31,7 @@ func ValidateAndGetTokenPayload(secretKey string, tokenString string) (err error
 	return
 }
 
-func validate(secretKey string, tokenString string) (err error, claim jwt.MapClaims) {
+func validate(secretKey []byte, tokenString string) (err error, claim jwt.MapClaims) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Ensure the signing method is what you expect (HMAC-SHA256 in this case)
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

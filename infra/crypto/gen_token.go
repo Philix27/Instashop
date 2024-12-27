@@ -7,7 +7,7 @@ import (
 )
 
 // CreateJWTToken creates a JWT token with the OTP as payload
-func CreateJWTToken(secretKey string, payload string, role string, d time.Duration) (tokenString string, err error) {
+func CreateJWTToken(secretKey []byte, payload string, role string, d time.Duration) (tokenString string, err error) {
 	// Define the claims
 	claims := jwt.MapClaims{
 		"payload": payload,
@@ -22,8 +22,7 @@ func CreateJWTToken(secretKey string, payload string, role string, d time.Durati
 	// Sign the token with the secret key
 	tokenString, err = token.SignedString(secretKey)
 	if err != nil {
-		return "", err
+		return
 	}
-
 	return
 }
