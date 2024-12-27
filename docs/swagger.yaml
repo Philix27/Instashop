@@ -107,13 +107,18 @@ definitions:
     properties:
       description:
         type: string
+      imageUrl:
+        type: string
       price:
+        type: integer
+      stock:
         type: integer
       title:
         type: string
     required:
     - description
     - price
+    - stock
     - title
     type: object
   products.ProductCreateResponse:
@@ -121,14 +126,18 @@ definitions:
       description:
         type: string
       id:
+        type: integer
+      imageUrl:
         type: string
       price:
-        type: string
+        type: integer
       title:
         type: string
     type: object
   products.ProductDeleteResponse:
     properties:
+      id:
+        type: string
       message:
         type: string
     type: object
@@ -153,6 +162,24 @@ definitions:
         type: string
       title:
         type: string
+    type: object
+  products.ProductUpdateInput:
+    properties:
+      description:
+        type: string
+      imageUrl:
+        type: string
+      price:
+        type: integer
+      stock:
+        type: integer
+      title:
+        type: string
+    required:
+    - description
+    - price
+    - stock
+    - title
     type: object
   products.ProductUpdateResponse:
     properties:
@@ -417,53 +444,6 @@ paths:
             $ref: '#/definitions/types.ErrMsg'
       tags:
       - Order_Cancel
-  /product/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: id of product
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Header must be set for valid response
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: '#/definitions/products.ProductDeleteResponse'
-      tags:
-      - Product_Delete
-    patch:
-      consumes:
-      - application/json
-      parameters:
-      - description: id of product
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Header must be set for valid response
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: '#/definitions/products.ProductUpdateResponse'
-      tags:
-      - Product_Update
   /products:
     get:
       consumes:
@@ -510,6 +490,29 @@ paths:
       tags:
       - Product_Create
   /products/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id of product
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/products.ProductDeleteResponse'
+      tags:
+      - Product_Delete
     get:
       consumes:
       - application/json
@@ -517,6 +520,11 @@ paths:
       - description: id of product
         in: path
         name: id
+        required: true
+        type: string
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
         required: true
         type: string
       produces:
@@ -528,4 +536,33 @@ paths:
             $ref: '#/definitions/products.ProductGetOneResponse'
       tags:
       - Product_GetOne
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: id of product
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Header must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Product_Update
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/products.ProductUpdateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/products.ProductUpdateResponse'
+      tags:
+      - Product_Update
 swagger: "2.0"

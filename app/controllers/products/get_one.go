@@ -14,13 +14,14 @@ type ProductGetOneResponse struct {
 	Price       string `json:"price"`
 }
 
-// @Tags		Product_GetOne
-// @Success	200	{string}	string
-// @Router		/products/{id} [get]
-// @Param		id	path	string	true	"id of product"
-// @Accept		json
-// @Produce	json
-// @Success	200	{object}	ProductGetOneResponse	"success"
+//	@Tags		Product_GetOne
+//	@Success	200	{string}	string
+//	@Router		/products/{id} [get]
+//	@Param		id				path	string	true	"id of product"
+//	@Param		Authorization	header	string	true	"Header must be set for valid response"
+//	@Accept		json
+//	@Produce	json
+//	@Success	200	{object}	ProductGetOneResponse	"success"
 func ProductGetOne(appState config.AppState) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		product_id := c.Param("id")

@@ -7,11 +7,15 @@ ORDER BY created_at DESC;
 INSERT INTO products (
   title,
   description,
+  price,
+  stock,
   image_url
 ) VALUES (
   $1,
   $2,
-  $3
+  $3,
+  $4,
+  $5
 )
 RETURNING *;
 
@@ -19,5 +23,11 @@ RETURNING *;
 UPDATE products
   SET title = $2,
   description = $3,
-  image_url = $4
+  stock = $4,
+  image_url = $5,
+  price = $6
+WHERE id = $1;
+
+-- name: Product_Delete :exec
+DELETE FROM products
 WHERE id = $1;

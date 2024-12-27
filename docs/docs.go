@@ -396,78 +396,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/product/{id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product_Delete"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "id of product",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Header must be set for valid response",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "schema": {
-                            "$ref": "#/definitions/products.ProductDeleteResponse"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product_Update"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "id of product",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Header must be set for valid response",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "schema": {
-                            "$ref": "#/definitions/products.ProductUpdateResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/products": {
             "get": {
                 "consumes": [
@@ -556,6 +484,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -563,6 +498,85 @@ const docTemplate = `{
                         "description": "success",
                         "schema": {
                             "$ref": "#/definitions/products.ProductGetOneResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product_Delete"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/products.ProductDeleteResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product_Update"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id of product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Header must be set for valid response",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Product_Update",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/products.ProductUpdateInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/products.ProductUpdateResponse"
                         }
                     }
                 }
@@ -733,13 +747,20 @@ const docTemplate = `{
             "required": [
                 "description",
                 "price",
+                "stock",
                 "title"
             ],
             "properties": {
                 "description": {
                     "type": "string"
                 },
+                "imageUrl": {
+                    "type": "string"
+                },
                 "price": {
+                    "type": "integer"
+                },
+                "stock": {
                     "type": "integer"
                 },
                 "title": {
@@ -754,10 +775,13 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "integer"
+                },
+                "imageUrl": {
                     "type": "string"
                 },
                 "price": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"
@@ -767,6 +791,9 @@ const docTemplate = `{
         "products.ProductDeleteResponse": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string"
+                },
                 "message": {
                     "type": "string"
                 }
@@ -800,6 +827,32 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "products.ProductUpdateInput": {
+            "type": "object",
+            "required": [
+                "description",
+                "price",
+                "stock",
+                "title"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "stock": {
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"

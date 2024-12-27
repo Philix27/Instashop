@@ -49,7 +49,7 @@ func main() {
 	// e.Use(middleware.CSRF())
 	// e.Use(echojwt.JWT([]byte("secret")))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"https://labstack.com", "https://labstack.net", "*"},
+		AllowOrigins: []string{"https://getinstashop.co", "*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 
@@ -77,7 +77,7 @@ func main() {
 
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.Validator = &BodyValidator{validator: validator.New()}
-	controllers.Registry(e, appState)
+	controllers.RoutesRegistry(e, appState)
 	// controllers.PrintRoutes(e)
 	e.Logger.Fatal(e.Start(":1323"))
 }

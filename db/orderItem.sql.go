@@ -52,6 +52,16 @@ func (q *Queries) OrderItem_DeleteItem(ctx context.Context, arg OrderItem_Delete
 	return err
 }
 
+const orderItem_DeleteOne = `-- name: OrderItem_DeleteOne :exec
+DELETE FROM order_items
+WHERE id = $1
+`
+
+func (q *Queries) OrderItem_DeleteOne(ctx context.Context, id int64) error {
+	_, err := q.db.Exec(ctx, orderItem_DeleteOne, id)
+	return err
+}
+
 const orderItem_GetAll = `-- name: OrderItem_GetAll :many
 SELECT id, quantity, created_at, updated_at, order_id, product_id FROM order_items
 ORDER BY created_at DESC

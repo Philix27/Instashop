@@ -1,6 +1,8 @@
 package orders
 
 import (
+	"instashop/infra/config"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -13,11 +15,11 @@ type OrderCreateResponse struct {
 	AccessToken string `json:"password"`
 }
 
-//	@Tags		Order_Create
-//	@Router		/orders [post]
-//	@Param		Authorization	header		string				true	"Header must be set for valid response"
-//	@Param		request			body		OrderCreateInput	true	"Order_Create"
-//	@Success	200				{object}	OrderCreateResponse	"success"
-//	@Accept		json
-//	@Produce	json
-func OrderCreate(c echo.Context) error { return nil }
+// @Tags		Order_Create
+// @Router		/orders [post]
+// @Param		Authorization	header		string				true	"Header must be set for valid response"
+// @Param		request			body		OrderCreateInput	true	"Order_Create"
+// @Success	200				{object}	OrderCreateResponse	"success"
+// @Accept		json
+// @Produce	json
+func OrderCreate(appState config.AppState) echo.HandlerFunc { return nil }

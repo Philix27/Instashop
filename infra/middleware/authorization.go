@@ -14,7 +14,6 @@ import (
 func CheckAuthorization(ap *config.AppState, requiredRole gorbac.Permission) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			println("Hello from user middleware")
 			tokenString := c.Request().Header.Get("Authorization")[7:] //Remove "Bearer " prefix
 
 			err, _, userRole := crypto.ValidateAndGetTokenPayload(ap.Env.JwtSecretKey, tokenString)
@@ -31,6 +30,8 @@ func CheckAuthorization(ap *config.AppState, requiredRole gorbac.Permission) ech
 			// 	})
 			// }
 
+			println("Gonna: ", userRole)
+			println("RequiredRole: ", requiredRole.ID())
 			// Check if user has the required role
 			if !ap.Rbac.IsGranted(userRole, gorbac.NewStdPermission(requiredRole.ID()), nil) {
 
