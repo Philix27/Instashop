@@ -58,27 +58,25 @@ type Order struct {
 	ID          int64
 	UserID      pgtype.Int4
 	OrderStatus NullOrderstatus
-	Items       []interface{}
 	CreatedAt   pgtype.Timestamp
 	UpdatedAt   pgtype.Timestamp
 }
 
 type OrderItem struct {
 	ID        int64
-	OrderID   int32
-	ProductID int32
 	Quantity  int32
-	AddedAt   pgtype.Timestamptz
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
+	OrderID   pgtype.Int4
+	ProductID pgtype.Int4
 }
 
 type Product struct {
 	ID          int64
 	Title       string
-	Description string
-	ImageUrl    string
-	Price       float64
+	Description pgtype.Text
+	ImageUrl    pgtype.Text
+	Price       int32
 	Stock       int32
 	CreatedAt   pgtype.Timestamp
 	UpdatedAt   pgtype.Timestamp
@@ -86,13 +84,7 @@ type Product struct {
 
 type User struct {
 	ID             int64
-	Wallets        []string
-	FirstName      pgtype.Text
-	LastName       pgtype.Text
-	MiddleName     pgtype.Text
-	Dob            pgtype.Timestamp
 	Email          string
-	Phone          pgtype.Text
 	HashedPassword string
 	CreatedAt      pgtype.Timestamp
 	UpdatedAt      pgtype.Timestamp

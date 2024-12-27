@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const orderItem_ClearOrders = `-- name: OrderItem_ClearOrders :exec
@@ -41,8 +43,8 @@ WHERE order_id = $1 AND product_id = $2
 `
 
 type OrderItem_DeleteItemParams struct {
-	OrderID   int32
-	ProductID int32
+	OrderID   pgtype.Int4
+	ProductID pgtype.Int4
 }
 
 func (q *Queries) OrderItem_DeleteItem(ctx context.Context, arg OrderItem_DeleteItemParams) error {
@@ -51,7 +53,7 @@ func (q *Queries) OrderItem_DeleteItem(ctx context.Context, arg OrderItem_Delete
 }
 
 const orderItem_GetAll = `-- name: OrderItem_GetAll :many
-SELECT id, order_id, product_id, quantity, added_at, created_at, updated_at FROM order_items
+SELECT id, quantity, created_at, updated_at, order_id, product_id FROM order_items
 ORDER BY created_at DESC
 `
 
@@ -66,12 +68,11 @@ func (q *Queries) OrderItem_GetAll(ctx context.Context) ([]OrderItem, error) {
 		var i OrderItem
 		if err := rows.Scan(
 			&i.ID,
-			&i.OrderID,
-			&i.ProductID,
 			&i.Quantity,
-			&i.AddedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.OrderID,
+			&i.ProductID,
 		); err != nil {
 			return nil, err
 		}
@@ -84,12 +85,12 @@ func (q *Queries) OrderItem_GetAll(ctx context.Context) ([]OrderItem, error) {
 }
 
 const orderItem_GetAllOrderId = `-- name: OrderItem_GetAllOrderId :many
-SELECT id, order_id, product_id, quantity, added_at, created_at, updated_at FROM order_items
+SELECT id, quantity, created_at, updated_at, order_id, product_id FROM order_items
 WHERE order_id = $1
 ORDER BY created_at DESC
 `
 
-func (q *Queries) OrderItem_GetAllOrderId(ctx context.Context, orderID int32) ([]OrderItem, error) {
+func (q *Queries) OrderItem_GetAllOrderId(ctx context.Context, orderID pgtype.Int4) ([]OrderItem, error) {
 	rows, err := q.db.Query(ctx, orderItem_GetAllOrderId, orderID)
 	if err != nil {
 		return nil, err
@@ -100,12 +101,11 @@ func (q *Queries) OrderItem_GetAllOrderId(ctx context.Context, orderID int32) ([
 		var i OrderItem
 		if err := rows.Scan(
 			&i.ID,
-			&i.OrderID,
-			&i.ProductID,
 			&i.Quantity,
-			&i.AddedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.OrderID,
+			&i.ProductID,
 		); err != nil {
 			return nil, err
 		}
