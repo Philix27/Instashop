@@ -3,10 +3,11 @@ package models
 type LoginInput struct {
 	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required"`
+	Role     string `json:"role" validate:"required"`
 }
 type LoginResponse struct {
-	UserId      string `json:"UserId"`
-	AccessToken string `json:"password"`
+	UserId      string `json:"userId"`
+	AccessToken string `json:"token"`
 }
 
 type RegisterInput struct {
@@ -20,7 +21,6 @@ type RegisterResponse struct {
 	Message string `json:"message"`
 }
 
-
 type SendEmailOtpInput struct {
 	Email string `json:"email" validate:"required"`
 }
@@ -30,7 +30,6 @@ type SendEmailResponse struct {
 	// todo: remove otp
 	Otp string `json:"otp"`
 }
-
 
 type VerifyOtpInput struct {
 	Token string `json:"token" validate:"required"`

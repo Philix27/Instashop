@@ -23,7 +23,7 @@ type ProductGetAllResponse struct {
 // @Success	200	{array}	ProductGetAllResponse	"success"
 func ProductGetAll(appState config.AppState) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		product_id := c.Param("id")
-		return c.String(http.StatusOK, product_id)
+
+		return c.String(http.StatusOK, "get All inner")
 	}
 }

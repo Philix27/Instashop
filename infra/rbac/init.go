@@ -2,6 +2,7 @@ package rbac
 
 import (
 	"instashop/infra/rbac/permissions"
+	"instashop/infra/rbac/roles"
 
 	"github.com/mikespook/gorbac"
 )
@@ -11,8 +12,8 @@ func InitRBAC() *gorbac.RBAC {
 	rbac := gorbac.New()
 
 	// Define roles
-	adminRole := gorbac.NewStdRole("admin")
-	userRole := gorbac.NewStdRole("user")
+	adminRole := gorbac.NewStdRole(roles.Admin)
+	userRole := gorbac.NewStdRole(roles.User)
 
 	//! Assign permissions to admin role
 	adminRole.Assign(permissions.ProductDelete)
@@ -20,20 +21,13 @@ func InitRBAC() *gorbac.RBAC {
 	adminRole.Assign(permissions.ProductCreate)
 	adminRole.Assign(permissions.ProductGet)
 	// *order
-	adminRole.Assign(permissions.OrderCreate)
-	adminRole.Assign(permissions.OrderDelete)
-	adminRole.Assign(permissions.OrderCancel)
 	adminRole.Assign(permissions.OrderGet)
-	adminRole.Assign(permissions.OrderUpdate)
 	// *user
 	adminRole.Assign(permissions.UserGet)
 	adminRole.Assign(permissions.UserUpdate)
 	adminRole.Assign(permissions.UserDelete)
 
 	//! Assign permissions to user role
-	userRole.Assign(permissions.ProductDelete)
-	userRole.Assign(permissions.ProductUpdate)
-	userRole.Assign(permissions.ProductCreate)
 	userRole.Assign(permissions.ProductGet)
 	// *order
 	userRole.Assign(permissions.OrderCreate)
